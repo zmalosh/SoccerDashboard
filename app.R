@@ -20,13 +20,13 @@ ui <- fluidPage(
 		sidebarPanel(
 			dateInput('gameDateInput', 'Game Date', format = 'yyyy-mm-dd'),
 			checkboxInput('oddsOnlyInput', 'Only Odds Leagues'),
-			checkboxInput('predictedOnlyInput', 'Only Predicted Leagues'),
 			width = 2
 		),
 
 
 		# Show a plot of the generated distribution
 		mainPanel(
+			textOutput('predictionImportStatusOutput'),
 			textOutput("dateOutput"),
 			DT::dataTableOutput('gamesOutput')
 		)
@@ -45,6 +45,7 @@ server <- function(input, output) {
 	source('src/data/get_leagues.R')
 	source('src/data/get_fixtures.R')
 	source('src/data/get_teams.R')
+	source('src/data/get_predictions.R')
 
 	output$dateOutput <- renderText(format(input$gameDateInput, '%Y-%m-%d'))
 
@@ -57,30 +58,78 @@ server <- function(input, output) {
 		dateGames <- get_fixtures_by_date(gameDate, useDataCache)
 	})
 
+	predictions <- reactive({
+		dateGames <- dateGames()
+		if(is.null(dateGames) || nrow(dateGames) == 0){
+			return(NULL)
+		}
+		fixtureIds <- dateGames %>% select(FixtureId)
+		fixtureCount <- nrow(fixtureIds)
+		preds <- NULL
+		withProgress(
+			message = 'Importing Predictions',
+			detail = 'This may take a few minutes if dust must be cleared',
+			value = 0,
+			{
+				for(i in 1:fixtureCount){
+					fixtureId <- fixtureIds[i,]
+					fixturePred <- get_predictions_by_fixture(fixtureId) %>%
+						mutate(FixtureId = fixture_id,
+							   HomePct = as.integer(str_replace(winning_percent$home, '%', '')),
+							   DrawPct = as.integer(str_replace(winning_percent$draws, '%', '')),
+							   AwayPct = as.integer(str_replace(winning_percent$away, '%', ''))) %>%
+						select(FixtureId, HomePct, DrawPct, AwayPct)
+					if(is.null(preds)){
+						preds <- fixturePred
+					}else{
+						preds <- rbind(preds, fixturePred)
+					}
+					incProgress(1/fixtureCount)
+				}
+			}
+		)
+		return(rawPreds)
+	})
+
 	dateGamesDisplay <- reactive({
 		leagues <- leagues()
 		dateGames <- dateGames()
 		if(is.null(leagues) || nrow(leagues) == 0 || is.null(dateGames) || nrow(dateGames) == 0){
 			return(NULL)
 		}
+		predictions <- predictions()
+		usePredictions <- is.null(predictions) || nrow(predictions) == 0
 		onlyOdds <- input$oddsOnlyInput
-		onlyPredicted <- input$predictedOnlyInput
 		x <- dateGames %>%
 			inner_join(leagues, by = 'LeagueId') %>%
 			filter(!onlyOdds | HasOdds) %>%
-			filter(!onlyPredicted | HasPredictions) %>%
-			transform(GameDate = GameDate,
+			transform(FixtureId = FixtureId,
+					  GameDate = GameDate,
 					  FlagUrl = ifelse(is.null(FlagUrl), url_image_x, FlagUrl),
 					  LogoUrl = ifelse(is.null(LogoUrl), url_image_x, LogoUrl),
 					  LeagueDisplay = paste0('<img src="', FlagUrl, '" height="', tableLogoHeight, '"></img>&nbsp;', LeagueName),
 					  HomeTeamDisplay = paste0('<img src="', HomeTeamLogo, '" height="', tableLogoHeight, '"></img>&nbsp;', HomeTeamName),
 					  AwayTeamDisplay = paste0('<img src="', AwayTeamLogo, '" height="', tableLogoHeight, '"></img>&nbsp;', AwayTeamName),
-					  GameTime = substr(GameDate, str_locate(GameDate, 'T') + 1, length(GameDate)) %>% substr(., 1, str_locate(., '-') - 1))
+					  GameTime = substr(GameDate, str_locate(GameDate, 'T') + 1, length(GameDate)) %>% substr(., 1, 5),
+					  HomePct = ' ',
+					  DrawPct = ' ',
+					  AwayPct = ' ')
+
+		if(usePredictions){
+			x <- x %>%
+				inner_join(preds, by = 'FixtureId') %>%
+				transform(HomePct = HomePct.y,
+						  DrawPct = DrawPct.y,
+						  AwayPct = AwayPct.y)
+		}
 
 		x <- x %>%
-			select(League = LeagueDisplay,
-				   HomeTeam = HomeTeamDisplay,
+			select(HomeTeam = HomeTeamDisplay,
 				   AwayTeam = AwayTeamDisplay,
+				   `H%` = HomePct,
+				   `D%` = DrawPct,
+				   `A%` = AwayPct,
+				   League = LeagueDisplay,
 				   `Start(EST)` = GameTime)
 		return(x)
 	})
