@@ -91,6 +91,96 @@ get_fixtures_by_league <- function(leagueId, allowCache = TRUE){
 	return (fixtures)
 }
 
+get_fixtures_by_date <- function(gameDate_yyyy_mm_dd, allowCache = TRUE){
+	url <- paste0('https://api-football-v1.p.rapidapi.com/v2/fixtures/date/', gameDate_yyyy_mm_dd, '?timezone=America/Detroit')
+	localPath <- paste0(getwd(), '/data/raw/dateFixtures/fixtures_', str_replace_all(gameDate_yyyy_mm_dd, '-', '_'), '.csv')
+	cacheExpirationMin <- 15
+
+	if(allowCache){
+		if(!dir.exists(dirname(localPath))){
+			dir.create(dirname(localPath))
+		}
+		if(file.exists(localPath) && (file.info(localPath)$ctime + (cacheExpirationMin * 60)) > Sys.time()){
+			cols <- cols(
+				FixtureId = col_double(),
+				LeagueId = col_double(),
+				GameDate = col_character(),
+				StatusShort = col_character(),
+				HomeTeamId = col_double(),
+				HomeTeamName = col_character(),
+				AwayTeamId = col_double(),
+				AwayTeamName = col_character(),
+				HomeScore = col_double(),
+				AwayScore = col_double(),
+				ScoreHalfTime = col_character(),
+				ScoreFullTime = col_character(),
+				# ScoreExtraTime = col_character(),
+				# ScorePenalty = col_character(),
+				TimeElapsed = col_double(),
+				Referee = col_character(),
+				Venue = col_character(),
+				Round = col_character(),
+				Status = col_character(),
+				EventTimestamp = col_double(),
+				FirstHalfStart = col_double(),
+				SecondHalfStart = col_double(),
+				HomeTeamLogo = col_character(),
+				AwayTeamLogo = col_character()
+			)
+			fixtures <- read_csv(localPath, col_types = cols)
+			return (fixtures)
+		}
+	}
+
+	json <- get_api_football_json_from_url(url)
+	fixtures <- json$fixtures
+	fixtures$FixtureId <- fixtures$fixture_id
+	fixtures$LeagueId <- fixtures$league_id
+	fixtures$GameDate <- fixtures$event_date
+	fixtures$StatusShort <- fixtures$statusShort
+	fixtures$HomeTeamId <- fixtures$homeTeam$team_id
+	fixtures$HomeTeamName <- fixtures$homeTeam$team_name
+	fixtures$AwayTeamId <- fixtures$awayTeam$team_id
+	fixtures$AwayTeamName <- fixtures$awayTeam$team_name
+	fixtures$HomeScore <- fixtures$goalsHomeTeam
+	fixtures$AwayScore <- fixtures$goalsAwayTeam
+	fixtures$ScoreHalfTime <- as.character(fixtures$score$halftime)
+	fixtures$ScoreFullTime <- as.character(fixtures$score$fulltime)
+	# fixtures$ScoreExtraTime <- fixtures$score$extratime
+	# fixtures$ScorePenalty <- fixtures$score$penalty
+	fixtures$TimeElapsed <- fixtures$elapsed
+	fixtures$Referee <- fixtures$referee
+	fixtures$Venue <- fixtures$venue
+	fixtures$Round <- fixtures$round
+	fixtures$Status <- fixtures$status
+	fixtures$EventTimestamp <- fixtures$event_timestamp
+	fixtures$FirstHalfStart <- fixtures$firstHalfStart
+	fixtures$SecondHalfStart <- fixtures$secondHalfStart
+	fixtures$HomeTeamLogo <- fixtures$homeTeam$logo
+	fixtures$AwayTeamLogo <- fixtures$awayTeam$logo
+	fixtures$fixture_id <- NULL
+	fixtures$league_id <- NULL
+	fixtures$homeTeam <- NULL
+	fixtures$awayTeam <- NULL
+	fixtures$score <- NULL
+	fixtures$referee <- NULL
+	fixtures$venue <- NULL
+	fixtures$event_timestamp <- NULL
+	fixtures$firstHalfStart <- NULL
+	fixtures$secondHalfStart <- NULL
+	fixtures$event_date <- NULL
+	fixtures$round <- NULL
+	fixtures$status <- NULL
+	fixtures$statusShort <- NULL
+	fixtures$elapsed <- NULL
+	fixtures$goalsAwayTeam <- NULL
+	fixtures$goalsHomeTeam <- NULL
+	if(allowCache){
+		write_csv(fixtures, path = localPath)
+	}
+	return (fixtures)
+}
+
 get_all_fixtures <- function(allowCache = TRUE){
 	source('src/data/get_leagues.R')
 	leagues <- get_leagues()

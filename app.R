@@ -11,40 +11,46 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-   
-   # Application title
-   titlePanel("Old Faithful Geyser Data"),
-   
-   # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
-      
-      # Show a plot of the generated distribution
-      mainPanel(
-         plotOutput("distPlot")
-      )
-   )
+
+	# Application title
+	titlePanel("Soccer Games"),
+
+	# Sidebar with a slider input for number of bins
+	sidebarLayout(
+		sidebarPanel(
+			dateInput('gameDateInput', 'Game Date', format = 'yyyy-mm-dd')
+		),
+
+
+		# Show a plot of the generated distribution
+		mainPanel(
+			textOutput("dateOutput"),
+			tableOutput('gamesOutput')
+		)
+	)
 )
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-   
-   output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
-   })
+	options(shiny.reactlog = TRUE,
+			stringsAsFactors = FALSE)
+	useDataCache <- TRUE
+
+	source('requirements.R')
+	source('src/data/get_leagues.R')
+	source('src/data/get_fixtures.R')
+	source('src/data/get_teams.R')
+
+	output$dateOutput <- renderText(format(input$gameDateInput, '%Y-%m-%d'))
+
+	dateGames <- reactive({
+		gameDate <- format(input$gameDateInput, '%Y-%m-%d')
+		dateGames <- get_fixtures_by_date(gameDate, useDataCache)
+	})
+
+	output$gamesOutput <- renderTable(dateGames())
 }
 
-# Run the application 
+# Run the application
 shinyApp(ui = ui, server = server)
 
