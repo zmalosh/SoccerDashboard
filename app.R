@@ -19,6 +19,8 @@ ui <- fluidPage(
 	sidebarLayout(
 		sidebarPanel(
 			dateInput('gameDateInput', 'Game Date', format = 'yyyy-mm-dd'),
+			checkboxInput('oddsOnlyInput', 'Only Odds Leagues'),
+			checkboxInput('predictedOnlyInput', 'Only Predicted Leagues'),
 			width = 2
 		),
 
@@ -61,8 +63,12 @@ server <- function(input, output) {
 		if(is.null(leagues) || nrow(leagues) == 0 || is.null(dateGames) || nrow(dateGames) == 0){
 			return(NULL)
 		}
+		onlyOdds <- input$oddsOnlyInput
+		onlyPredicted <- input$predictedOnlyInput
 		x <- dateGames %>%
 			inner_join(leagues, by = 'LeagueId') %>%
+			filter(!onlyOdds | HasOdds) %>%
+			filter(!onlyPredicted | HasPredictions) %>%
 			transform(GameDate = GameDate,
 					  FlagUrl = ifelse(is.null(FlagUrl), url_image_x, FlagUrl),
 					  LogoUrl = ifelse(is.null(LogoUrl), url_image_x, LogoUrl),

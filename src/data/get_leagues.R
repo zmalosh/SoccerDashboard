@@ -20,8 +20,16 @@ get_leagues <- function(allowCache = TRUE){
 				SeasonEndDate = col_date(format = ""),
 				LogoUrl = col_character(),
 				FlagUrl = col_character(),
+				IsCurrentSeason = col_logical(),
 				HasStandings = col_logical(),
-				IsCurrentSeason = col_logical()
+				HasFixtures = col_logical(),
+				HasLineups = col_logical(),
+				HasTeamStats = col_logical(),
+				HasPlayerStats = col_logical(),
+				HasPlayers = col_logical(),
+				HasTopScorers = col_logical(),
+				HasPredictions = col_logical(),
+				HasOdds = col_logical()
 			)
 			leagues <- read_csv(localPath, col_types = cols)
 			return (leagues)
@@ -45,12 +53,23 @@ get_leagues <- function(allowCache = TRUE){
 			SeasonEndDate = season_end,
 			LogoUrl = logo,
 			FlagUrl = flag,
-			HasStandings = standings == 1,
-			IsCurrentSeason = is_current == 1
+			IsCurrentSeason = is_current == 1,
+			HasStandings = coverage$standings,
+			HasFixtures = coverage$fixtures$events,
+			HasLineups = coverage$fixtures$lineups,
+			HasTeamStats = coverage$fixtures$statistics,
+			HasPlayerStats = coverage$fixtures$players_statistics,
+			HasPlayers = coverage$players,
+			HasTopScorers = coverage$topScorers,
+			HasPredictions = coverage$predictions,
+			HasOdds = coverage$odds
 		) %>%
 		select(LeagueId, LeagueName, Country, CountryCode,
 			   Season, SeasonStartDate, SeasonEndDate,
-			   LogoUrl, FlagUrl, HasStandings, IsCurrentSeason)
+			   LogoUrl, FlagUrl, HasStandings, IsCurrentSeason,
+			   HasStandings, HasFixtures, HasLineups, HasTeamStats,
+			   HasPlayerStats, HasPlayers, HasTopScorers,
+			   HasPredictions, HasOdds)
 	if(allowCache){
 		write_csv(leagues, localPath)
 	}
