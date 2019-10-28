@@ -43,7 +43,12 @@ ui <- fluidPage(
 				 		   HTML('<h2>VERSUS</h2>')),
 				 	column(2,
 				 		   htmlOutput('gdt_awayTeamName'),
-				 		   htmlOutput('gdt_awayTeamLogo')))
+				 		   htmlOutput('gdt_awayTeamLogo'))),
+				 fluidRow(HTML('<h3>ODDS</h3>')),
+				 fluidRow(
+				 	htmlOutput('gdt_odds_winner_title'),
+				 	DT::dataTableOutput('gdt_odds_winner')
+				 )
 		)
 	)
 )
@@ -74,6 +79,7 @@ server <- function(input, output, session) {
 	source('src/data/get_fixtures.R')
 	source('src/data/get_teams.R')
 	source('src/data/get_predictions.R')
+	source('src/data/get_odds.R')
 
 	output$dateOutput <- renderText(format(input$GameDateInput, '%Y-%m-%d'))
 
@@ -248,6 +254,7 @@ server <- function(input, output, session) {
 	####
 
 	gameSummary <- reactive({
+		print('gameSummary')
 		fixtureId <- selectedDetailedFixtureId()
 		if(is.null(fixtureId) || is.na(fixtureId)){
 			return(NULL)
@@ -264,6 +271,7 @@ server <- function(input, output, session) {
 	})
 
 	gdt_homeTeamName <- reactive({
+		print('gdt_homeTeamName')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary)){
 			return(NULL)
@@ -272,6 +280,7 @@ server <- function(input, output, session) {
 	})
 
 	gdt_homeTeamLogo <- reactive({
+		print('gdt_homeTeamLogo')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary)){
 			return(NULL)
@@ -280,6 +289,7 @@ server <- function(input, output, session) {
 	})
 
 	gdt_awayTeamName <- reactive({
+		print('gdt_awayTeamName')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary)){
 			return(NULL)
@@ -288,6 +298,7 @@ server <- function(input, output, session) {
 	})
 
 	gdt_awayTeamLogo <- reactive({
+		print('gdt_awayTeamLogo')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary)){
 			return(NULL)
@@ -295,12 +306,70 @@ server <- function(input, output, session) {
 		return(gameSummary$AwayTeamLogo)
 	})
 
+	gdt_odds <- reactive({
+		print('gdt_odds')
+		fixtureId <- selectedDetailedFixtureId()
+		if(is.null(fixtureId)){
+			print('gdt_odds:null fixtureId')
+			return(NULL)
+		}
+		odds <- get_odds_by_fixture(fixtureId)
+		if(is.null(odds)){
+			print('gdt_odds:null odds')
+			return(NULL)
+		}
+		if(nrow(odds) == 0){
+			print('gdt_odds:no rows for odds')
+			return(NULL)
+		}
+		print('gdt_odds:got the odds')
+		return(odds)
+	})
+
 	output$gdt_homeTeamName <- renderText(paste0('<h2>', gdt_homeTeamName(), '</h2>'))
 	output$gdt_awayTeamName <- renderText(paste0('<h2>', gdt_awayTeamName(), '</h2>'))
 	output$gdt_homeTeamLogo <- renderText(paste0('<img style="width:120px;" src="', gdt_homeTeamLogo(), '"></img>'))
 	output$gdt_awayTeamLogo <- renderText(paste0('<img style="width:120px;" src="', gdt_awayTeamLogo(), '"></img>'))
 
-	output$gdp_gameId <- renderText(paste('Game Selected:', selectedDetailedFixtureId()))
+	gdt_odds_winner <- reactive({
+		print('gdt_odds_winner')
+		allOdds <- gdt_odds()
+		if(is.null(allOdds)){
+			print('gdt_odds_winner: null allOdds')
+			return(NULL)
+		}
+		if(nrow(allOdds) == 0){
+			print('gdt_odds_winner: no allOdds rows')
+			return(NULL)
+		}
+		odds <- allOdds %>% filter(BetTypeId == 1)
+		if(nrow(odds) == 0){
+			print('gdt_odds_winner: no odds rows')
+			return(NULL)
+		}
+		result <- odds %>%
+			group_by(BookmakerId, BookmakerName, MarketName) %>%
+			summarise(Line = min(MarketLine)) %>%
+			pivot_wider(names_from = MarketName, values_from = Line) %>%
+			mutate(AwayProb = round(100 * (1/Away) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
+				   DrawProb = round(100 * (1/Draw) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
+				   HomeProb = round(100 * (1/Home) / ((1/Away)+(1/Draw)+1/Home), digits = 1)) %>%
+			select(-BookmakerId) %>%
+			arrange(BookmakerName)
+		print('gdt_odds_winner: got odds')
+		return(result)
+	})
+	gdt_odds_winner_title <- reactive({
+		print('gdt_odds_winner_title')
+		odds <- gdt_odds_winner()
+		if(is.null(odds)){
+			return(NULL)
+		}
+		return('<h4>Match Winner</h4>')
+	})
+	output$gdt_odds_winner <- DT::renderDataTable(DT::datatable(gdt_odds_winner(), escape = FALSE, options = list(pageLength = 1000, lengthMenu = c(25, 50, 100, 250, 500, 1000))))
+	output$gdt_odds_winner_title <- renderText(gdt_odds_winner_title())
+
 }
 
 # Run the application
