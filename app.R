@@ -350,8 +350,8 @@ server <- function(input, output, session) {
 		if(is.null(predictions)){
 			return(NULL)
 		}
-		homeScore <- round(as.numeric(str_replace(prediction$goals_home, '-', '')), digits = 1)
-		awayScore <- round(as.numeric(str_replace(prediction$goals_away, '-', '')), digits = 1)
+		homeScore <- round(as.numeric(str_replace(predictions$goals_home, '-', '')), digits = 1)
+		awayScore <- round(as.numeric(str_replace(predictions$goals_away, '-', '')), digits = 1)
 		return(paste0('Score: ', homeScore, '-', awayScore))
 	})
 
