@@ -67,6 +67,9 @@ server <- function(input, output, session) {
 	dateGames <- reactive({
 		print('dateGames')
 		gameDate <- gameDate()
+		if(is.null(gameDate)){
+			return(NULL)
+		}
 		dateGames <- get_fixtures_by_date(gameDate, useDataCache)
 	})
 
