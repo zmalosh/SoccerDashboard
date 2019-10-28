@@ -29,10 +29,13 @@ ui <- fluidPage(
 				# Show a plot of the generated distribution
 				mainPanel(
 					textOutput('predictionImportStatusOutput'),
-					textOutput("dateOutput"),
 					DT::dataTableOutput('gamesOutput')
 				)
 			)
+		),
+		tabPanel('Panel 2',
+			titlePanel("Individual Game"),
+			textOutput('gdp_gameId')
 		)
 	)
 )
@@ -45,6 +48,18 @@ server <- function(input, output, session) {
 	tableLogoHeight <- 20
 	notSelectedVal <- -1
 	url_image_x <- 'https://p1.hiclipart.com/preview/805/253/78/cp39-for-object-dock-red-x-symbol-png-clipart.jpg'
+
+	selectedDetailedFixtureId <- reactiveVal(NA)
+
+	buttonInput <- function(FUN, baseId, ids, ...) {
+		len <- length(ids)
+		inputs <- character(len)
+		for (i in seq_len(len)) {
+			id <- ids[i]
+			inputs[i] <- as.character(FUN(paste0(baseId, id), ...))
+		}
+		inputs
+	}
 
 	source('requirements.R')
 	source('src/data/get_leagues.R')
@@ -193,8 +208,15 @@ server <- function(input, output, session) {
 						  AwayPct = AwayPct.y)
 		}
 
+		detailButtons <- buttonInput(FUN = actionButton,
+									 baseId = 'button_',
+									 ids = x$FixtureId,
+									 label = 'DETAILS',
+									 onclick = 'Shiny.onInputChange(\"detailsButton\",  this.id)')
+		x$Action <- detailButtons
 		x <- x %>%
-			select(HomeTeam = HomeTeamDisplay,
+			select(Action,
+				   HomeTeam = HomeTeamDisplay,
 				   AwayTeam = AwayTeamDisplay,
 				   `H%` = HomePct,
 				   `D%` = DrawPct,
@@ -205,7 +227,18 @@ server <- function(input, output, session) {
 		return(x)
 	})
 
+	observeEvent(input$detailsButton, {
+		id <- as.integer(str_replace(input$detailsButton, 'button_', ''))
+		selectedDetailedFixtureId(id)
+	})
+
 	output$gamesOutput <- DT::renderDataTable(DT::datatable(dateGamesDisplay(), escape = FALSE, options = list(pageLength = 1000, lengthMenu = c(25, 50, 100, 250, 500, 1000))))
+
+	####
+	#### GAME DETAILS TAB
+	####
+
+	output$gdp_gameId <- renderText(paste('Game Selected:', selectedDetailedFixtureId()))
 }
 
 # Run the application
