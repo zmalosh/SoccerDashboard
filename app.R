@@ -11,7 +11,7 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-	tabsetPanel(
+	tabsetPanel(id='tabs',
 		tabPanel('Games',
 			# Application title
 			titlePanel("Soccer Games"),
@@ -33,9 +33,10 @@ ui <- fluidPage(
 				)
 			)
 		),
-		tabPanel('Panel 2',
-			titlePanel("Individual Game"),
-			textOutput('gdp_gameId')
+		tabPanel(value = 'GameDetailsTab',
+				 title = 'Game Details',
+				 titlePanel("Individual Game"),
+				 textOutput('gdp_gameId')
 		)
 	)
 )
@@ -230,6 +231,7 @@ server <- function(input, output, session) {
 	observeEvent(input$detailsButton, {
 		id <- as.integer(str_replace(input$detailsButton, 'button_', ''))
 		selectedDetailedFixtureId(id)
+		updateTabsetPanel(session, 'tabs', selected = 'GameDetailsTab')
 	})
 
 	output$gamesOutput <- DT::renderDataTable(DT::datatable(dateGamesDisplay(), escape = FALSE, options = list(pageLength = 1000, lengthMenu = c(25, 50, 100, 250, 500, 1000))))
