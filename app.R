@@ -171,7 +171,7 @@ server <- function(input, output, session) {
 					  LeagueDisplay = paste0('<img src="', FlagUrl, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', LeagueName),
 					  HomeTeamDisplay = paste0('<img src="', HomeTeamLogo, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', HomeTeamName, '</span>'),
 					  AwayTeamDisplay = paste0('<img src="', AwayTeamLogo, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', AwayTeamName, '</span>'),
-					  GameTime = substr(GameDate, str_locate(GameDate, 'T') + 1, length(GameDate)) %>% substr(., 1, 5),
+					  GameTime = substr(GameDate, 12, 16),
 					  HomePct = ' ',
 					  DrawPct = ' ',
 					  AwayPct = ' ')
