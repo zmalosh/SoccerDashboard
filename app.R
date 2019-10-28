@@ -18,9 +18,10 @@ ui <- fluidPage(
 	# Sidebar with a slider input for number of bins
 	sidebarLayout(
 		sidebarPanel(
-			dateInput('gameDateInput', 'Game Date', format = 'yyyy-mm-dd'),
-			checkboxInput('oddsOnlyInput', 'Only Odds Leagues'),
-			width = 2
+			dateInput('GameDateInput', 'Game Date', format = 'yyyy-mm-dd'),
+			uiOutput('LeagueIdUI'),
+			checkboxInput('OddsOnlyInput', 'Only Odds Leagues'),
+			width = 3
 		),
 
 
@@ -34,11 +35,12 @@ ui <- fluidPage(
 )
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
 	options(shiny.reactlog = TRUE,
 			stringsAsFactors = FALSE)
 	useDataCache <- TRUE
 	tableLogoHeight <- 20
+	notSelectedVal <- -1
 	url_image_x <- 'https://p1.hiclipart.com/preview/805/253/78/cp39-for-object-dock-red-x-symbol-png-clipart.jpg'
 
 	source('requirements.R')
@@ -47,18 +49,70 @@ server <- function(input, output) {
 	source('src/data/get_teams.R')
 	source('src/data/get_predictions.R')
 
-	output$dateOutput <- renderText(format(input$gameDateInput, '%Y-%m-%d'))
+	output$dateOutput <- renderText(format(input$GameDateInput, '%Y-%m-%d'))
 
 	leagues <- reactive({
+		print('leagues')
 		leagues <- get_leagues(useDataCache)
 	})
 
+	gameDate <- reactive({
+		print('gameDate')
+		if(is.null(input$GameDateInput)){
+			return(NULL)
+		}
+		gameDate <- format(input$GameDateInput, '%Y-%m-%d')
+	})
+
 	dateGames <- reactive({
-		gameDate <- format(input$gameDateInput, '%Y-%m-%d')
+		print('dateGames')
+		gameDate <- gameDate()
 		dateGames <- get_fixtures_by_date(gameDate, useDataCache)
 	})
 
+	leagueOptions <- reactive({
+		print('leagueOptions')
+		dateGames <- dateGames()
+		if(is.null(dateGames)){
+			leagueOptions <- list('ALL LEAGUES GOOD' = notSelectedVal)
+			return(leagueOptions)
+		}
+		gameDate <- gameDate()
+		leagues <- leagues()
+		if(is.null(leagues) || nrow(leagues) == 0 || is.null(dateGames) || nrow(dateGames) == 0){
+			leagueOptions <- list('ALL LEAGUES GOOD' = notSelectedVal)
+		}
+		else{
+			onlyOdds <- input$OddsOnlyInput
+			x <- dateGames %>%
+				inner_join(leagues, by = 'LeagueId') %>%
+				filter(!onlyOdds | HasOdds) %>%
+				transform(LeagueDisplay = paste0('<img src="', FlagUrl, '" height="', tableLogoHeight, '"></img>&nbsp;', Country, ' - ', LeagueName)) %>%
+				transform(LeagueDisplay = paste(Country, '-', LeagueName)) %>%
+				select(LeagueId, LeagueDisplay, LeagueName, Country) %>%
+				unique() %>%
+				arrange(Country, LeagueDisplay)
+			leagueOptions <- c(notSelectedVal, as.list(x$LeagueId))
+			leagueNames <- c('ALL LEAGUES', as.list(x$LeagueDisplay))
+			setNames(leagueOptions, leagueNames)
+		}
+	})
+
+	output$LeagueIdUI <- renderUI({
+		print('output$LeagueIdUI')
+		selectInput('LeagueId', 'Leagues', leagueOptions())
+	})
+
+	selectedLeagueId <- reactive({
+		print('selectedLeagueId')
+		if(is.null(input$LeagueId)){
+			return(NULL)
+		}
+		selectedLeagueId <- input$LeagueId
+	})
+
 	predictions <- reactive({
+		print('predictions')
 		dateGames <- dateGames()
 		if(is.null(dateGames) || nrow(dateGames) == 0){
 			return(NULL)
@@ -68,7 +122,7 @@ server <- function(input, output) {
 		preds <- NULL
 		withProgress(
 			message = 'Importing Predictions',
-			detail = 'This may take a few minutes if dust must be cleared',
+			detail = 'This may take a few minutes',
 			value = 0,
 			{
 				for(i in 1:fixtureCount){
@@ -88,36 +142,46 @@ server <- function(input, output) {
 				}
 			}
 		)
-		return(rawPreds)
+		return(preds)
 	})
 
 	dateGamesDisplay <- reactive({
+		print('dateGamesDisplay')
 		leagues <- leagues()
 		dateGames <- dateGames()
 		if(is.null(leagues) || nrow(leagues) == 0 || is.null(dateGames) || nrow(dateGames) == 0){
 			return(NULL)
 		}
-		predictions <- predictions()
-		usePredictions <- is.null(predictions) || nrow(predictions) == 0
-		onlyOdds <- input$oddsOnlyInput
-		x <- dateGames %>%
+		selectedLeagueId <- selectedLeagueId()
+		noLeagueSelected <- is.null(selectedLeagueId) || selectedLeagueId == notSelectedVal
+		onlyOdds <- input$OddsOnlyInput
+		if(noLeagueSelected){
+			x <- dateGames
+		} else {
+			x <- dateGames %>%
+				filter(noLeagueSelected | selectedLeagueId == LeagueId)
+		}
+		x <- x %>%
 			inner_join(leagues, by = 'LeagueId') %>%
 			filter(!onlyOdds | HasOdds) %>%
 			transform(FixtureId = FixtureId,
 					  GameDate = GameDate,
 					  FlagUrl = ifelse(is.null(FlagUrl), url_image_x, FlagUrl),
 					  LogoUrl = ifelse(is.null(LogoUrl), url_image_x, LogoUrl),
-					  LeagueDisplay = paste0('<img src="', FlagUrl, '" height="', tableLogoHeight, '"></img>&nbsp;', LeagueName),
-					  HomeTeamDisplay = paste0('<img src="', HomeTeamLogo, '" height="', tableLogoHeight, '"></img>&nbsp;', HomeTeamName),
-					  AwayTeamDisplay = paste0('<img src="', AwayTeamLogo, '" height="', tableLogoHeight, '"></img>&nbsp;', AwayTeamName),
+					  LeagueDisplay = paste0('<img src="', FlagUrl, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', LeagueName),
+					  HomeTeamDisplay = paste0('<img src="', HomeTeamLogo, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', HomeTeamName, '</span>'),
+					  AwayTeamDisplay = paste0('<img src="', AwayTeamLogo, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', AwayTeamName, '</span>'),
 					  GameTime = substr(GameDate, str_locate(GameDate, 'T') + 1, length(GameDate)) %>% substr(., 1, 5),
 					  HomePct = ' ',
 					  DrawPct = ' ',
 					  AwayPct = ' ')
 
+		predictions <- predictions()
+		usePredictions <- !is.null(predictions) && nrow(predictions) > 0
+
 		if(usePredictions){
 			x <- x %>%
-				inner_join(preds, by = 'FixtureId') %>%
+				inner_join(predictions, by = 'FixtureId') %>%
 				transform(HomePct = HomePct.y,
 						  DrawPct = DrawPct.y,
 						  AwayPct = AwayPct.y)
@@ -131,6 +195,7 @@ server <- function(input, output) {
 				   `A%` = AwayPct,
 				   League = LeagueDisplay,
 				   `Start(EST)` = GameTime)
+
 		return(x)
 	})
 
