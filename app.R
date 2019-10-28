@@ -35,8 +35,15 @@ ui <- fluidPage(
 		),
 		tabPanel(value = 'GameDetailsTab',
 				 title = 'Game Details',
-				 titlePanel("Individual Game"),
-				 textOutput('gdp_gameId')
+				 fluidRow(
+				 	column(2,
+				 		   htmlOutput('gdt_homeTeamName'),
+				 		   htmlOutput('gdt_homeTeamLogo')),
+				 	column(2,
+				 		   HTML('<h2>VERSUS</h2>')),
+				 	column(2,
+				 		   htmlOutput('gdt_awayTeamName'),
+				 		   htmlOutput('gdt_awayTeamLogo')))
 		)
 	)
 )
@@ -239,6 +246,59 @@ server <- function(input, output, session) {
 	####
 	#### GAME DETAILS TAB
 	####
+
+	gameSummary <- reactive({
+		fixtureId <- selectedDetailedFixtureId()
+		if(is.null(fixtureId) || is.na(fixtureId)){
+			return(NULL)
+		}
+		dateGames <- dateGames()
+		if(is.null(dateGames) || nrow(dateGames) == 0){
+			return(NULL)
+		}
+		gameSummary <- dateGames %>% filter(FixtureId == fixtureId)
+		if(is.null(gameSummary) || nrow(gameSummary) != 1){
+			return(NULL)
+		}
+		return(gameSummary)
+	})
+
+	gdt_homeTeamName <- reactive({
+		gameSummary <- gameSummary()
+		if(is.null(gameSummary)){
+			return(NULL)
+		}
+		return(gameSummary$HomeTeamName)
+	})
+
+	gdt_homeTeamLogo <- reactive({
+		gameSummary <- gameSummary()
+		if(is.null(gameSummary)){
+			return(NULL)
+		}
+		return(gameSummary$HomeTeamLogo)
+	})
+
+	gdt_awayTeamName <- reactive({
+		gameSummary <- gameSummary()
+		if(is.null(gameSummary)){
+			return(NULL)
+		}
+		return(gameSummary$AwayTeamName)
+	})
+
+	gdt_awayTeamLogo <- reactive({
+		gameSummary <- gameSummary()
+		if(is.null(gameSummary)){
+			return(NULL)
+		}
+		return(gameSummary$AwayTeamLogo)
+	})
+
+	output$gdt_homeTeamName <- renderText(paste0('<h2>', gdt_homeTeamName(), '</h2>'))
+	output$gdt_awayTeamName <- renderText(paste0('<h2>', gdt_awayTeamName(), '</h2>'))
+	output$gdt_homeTeamLogo <- renderText(paste0('<img style="width:120px;" src="', gdt_homeTeamLogo(), '"></img>'))
+	output$gdt_awayTeamLogo <- renderText(paste0('<img style="width:120px;" src="', gdt_awayTeamLogo(), '"></img>'))
 
 	output$gdp_gameId <- renderText(paste('Game Selected:', selectedDetailedFixtureId()))
 }
