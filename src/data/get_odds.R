@@ -13,7 +13,7 @@ get_odds_by_fixture <- function(fixtureId, allowCache = TRUE){
 			cols <- cols(
 				LeagueId = col_double(),
 				UpdateTime = col_double(),
-				GameId = col_double(),
+				FixtureId = col_double(),
 				BookmakerId = col_double(),
 				BookmakerName = col_character(),
 				BetTypeId = col_double(),
@@ -32,7 +32,7 @@ get_odds_by_fixture <- function(fixtureId, allowCache = TRUE){
 	df <- data.frame(
 		LeagueId = c(),
 		UpdateTime = c(),
-		GameId = c(),
+		FixtureId = c(),
 		BookmakerId = c(),
 		BookmakerName = c(),
 		BetTypeId = c(),
@@ -61,7 +61,7 @@ get_odds_by_fixture <- function(fixtureId, allowCache = TRUE){
 						x <- data.frame(
 							LeagueId = leagueId,
 							UpdateTime = updateTime,
-							GameId = fixtureId,
+							FixtureId = fixtureId,
 							BookmakerId = bookmakerId,
 							BookmakerName = bookmakerName,
 							BetTypeId = labelId,
@@ -94,7 +94,7 @@ get_odds_by_league <- function(leagueId, allowCache = TRUE){
 			cols <- cols(
 				LeagueId = col_double(),
 				UpdateTime = col_double(),
-				GameId = col_double(),
+				FixtureId = col_double(),
 				BookmakerId = col_double(),
 				BookmakerName = col_character(),
 				BetTypeId = col_double(),
@@ -113,7 +113,7 @@ get_odds_by_league <- function(leagueId, allowCache = TRUE){
 	df <- data.frame(
 		LeagueId = c(),
 		UpdateTime = c(),
-		GameId = c(),
+		FixtureId = c(),
 		BookmakerId = c(),
 		BookmakerName = c(),
 		BetTypeId = c(),
@@ -142,7 +142,7 @@ get_odds_by_league <- function(leagueId, allowCache = TRUE){
 						x <- data.frame(
 							LeagueId = leagueId,
 							UpdateTime = updateTime,
-							GameId = fixtureId,
+							FixtureId = fixtureId,
 							BookmakerId = bookmakerId,
 							BookmakerName = bookmakerName,
 							BetTypeId = labelId,
