@@ -57,13 +57,12 @@ ui <- fluidPage(
 			 		),
 			 		tabPanel(value='GameDetailsH2HTab',
 			 				 title='H2H',
-			 				 fluidRow(HTML('<h4>H2H</H4>'))
+			 				 fluidRow(HTML('<h4>H2H</H4>')),
+			 				 fluidRow(DT::dataTableOutput('gdt_h2h_games'))
 			 		),
 			 		tabPanel(value='GameDetailsOddsTab',
 			 				 title='Odds',
-			 				 fluidRow(
-			 				 	HTML('<h4>Odds</h4>')
-			 				 ),
+			 				 fluidRow(HTML('<h4>Odds</h4>')),
 			 				 fluidRow(
 			 				 	htmlOutput('gdt_odds_winner_title'),
 			 				 	DT::dataTableOutput('gdt_odds_winner')
@@ -368,6 +367,66 @@ server <- function(input, output, session) {
 		awayPct <- predictions$winning_percent$away
 		return(paste0(homePct, '-', drawPct, '-', awayPct))
 	})
+
+	####
+	#### GAME DETAILS TAB - H2H
+	####
+	gdt_h2h <- reactive({
+		predictions <- gdt_predictions()
+		if(is.null(predictions)){
+			return(NULL)
+		}
+		h2h <- predictions$h2h
+		if(is.null(h2h)){
+			return(NULL)
+		}
+		h2h <- x <- as.data.frame(h2h[1])
+		if(nrow(h2h) == 0){
+			return(NULL)
+		}
+		return(h2h)
+	})
+
+	gdt_h2h_games_display <- reactive({
+		leagues <- leagues()
+		if(is.null(leagues) || nrow(leagues) == 0){
+			return(NULL)
+		}
+		h2h <- gdt_h2h()
+		if(is.null(h2h) || nrow(h2h) == 0){
+			return(NULL)
+		}
+		h2h <- h2h %>% inner_join(leagues, by = c('league_id' = 'LeagueId'))
+		draw_image_url <- 'https://cdn.iconscout.com/icon/premium/png-256-thumb/pass-soccer-ball-1424555-1204788.png'
+		display <- h2h %>%
+			mutate(
+				HomeLogo = homeTeam$logo,
+				AwayLogo = awayTeam$logo,
+				HomeName = homeTeam$team_name,
+				AwayName = awayTeam$team_name,
+				HomeTeam = paste0('<img src="', HomeLogo, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', HomeName, '</span>'),
+				AwayTeam = paste0('<img src="', AwayLogo, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', AwayName, '</span>'),
+				GameDate = substr(event_date, 1, 10),
+				HomeScore = goalsHomeTeam,
+				AwayScore = goalsAwayTeam,
+				Status = statusShort,
+				Competition = LeagueName,
+				WinnerName = ifelse(HomeScore > AwayScore, HomeName, ifelse(HomeScore < AwayScore, AwayName, 'Draw')),
+				WinnerLogo = ifelse(HomeScore > AwayScore, HomeLogo, ifelse(HomeScore < AwayScore, AwayLogo, draw_image_url)),
+				Result = paste0(HomeScore, '-', AwayScore, '&nbsp;<img src="', WinnerLogo, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', WinnerName, '</span>'),
+				Venue = venue,
+				Referee = referee
+			) %>%
+			select(Competition, HomeTeam, AwayTeam, Result, Status, GameDate, Venue, Referee) %>%
+			arrange(desc(GameDate))
+		return(display)
+	})
+
+	output$gdt_h2h_games <- DT::renderDataTable(DT::datatable(gdt_h2h_games_display(), escape = FALSE, options = list(pageLength = 50, lengthMenu = c(10, 25, 50, 100, 150, 200))))
+
+	####
+	#### GAME DETAILS TAB - ODDS
+	####
 
 	gdt_odds <- reactive({
 		print('gdt_odds')
