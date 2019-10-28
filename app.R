@@ -360,12 +360,12 @@ server <- function(input, output, session) {
 		if(is.null(predictions)){
 			return(NULL)
 		}
-		if(is.null(prediction$winning_percent)){
+		if(is.null(predictions$winning_percent)){
 			return(NULL)
 		}
-		homePct <- prediction$winning_percent$home
-		drawPct <- prediction$winning_percent$draws
-		awayPct <- prediction$winning_percent$away
+		homePct <- predictions$winning_percent$home
+		drawPct <- predictions$winning_percent$draws
+		awayPct <- predictions$winning_percent$away
 		return(paste0(homePct, '-', drawPct, '-', awayPct))
 	})
 
