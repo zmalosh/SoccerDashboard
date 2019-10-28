@@ -43,12 +43,33 @@ ui <- fluidPage(
 				 		   HTML('<h2>VERSUS</h2>')),
 				 	column(2,
 				 		   htmlOutput('gdt_awayTeamName'),
-				 		   htmlOutput('gdt_awayTeamLogo'))),
-				 fluidRow(HTML('<h3>ODDS</h3>')),
+				 		   htmlOutput('gdt_awayTeamLogo'))
+				 ),
 				 fluidRow(
-				 	htmlOutput('gdt_odds_winner_title'),
-				 	DT::dataTableOutput('gdt_odds_winner')
-				 )
+				 	htmlOutput('gdt_advice'),
+				 	HTML('<br />'),
+				 	htmlOutput('gdt_pred_pcts')),
+
+			 	tabsetPanel(id = 'GameDetailsDetailTabs',
+			 		tabPanel(value='GameDetailsFormTab',
+			 				 title='Form',
+			 				 fluidRow(HTML('<h4>Form</h4>'))
+			 		),
+			 		tabPanel(value='GameDetailsH2HTab',
+			 				 title='H2H',
+			 				 fluidRow(HTML('<h4>H2H</H4>'))
+			 		),
+			 		tabPanel(value='GameDetailsOddsTab',
+			 				 title='Odds',
+			 				 fluidRow(
+			 				 	HTML('<h4>Odds</h4>')
+			 				 ),
+			 				 fluidRow(
+			 				 	htmlOutput('gdt_odds_winner_title'),
+			 				 	DT::dataTableOutput('gdt_odds_winner')
+			 				 )
+			 		)
+			 	)
 		)
 	)
 )
@@ -306,6 +327,48 @@ server <- function(input, output, session) {
 		return(gameSummary$AwayTeamLogo)
 	})
 
+	gdt_predictions <- reactive({
+		print('gdt_predictions')
+		fixtureId <- selectedDetailedFixtureId()
+		if(is.null(fixtureId) || is.na(fixtureId)){
+			return(NULL)
+		}
+		predictions <- get_predictions_by_fixture(fixtureId)
+		return(predictions)
+	})
+
+	gdt_pred_advice <- reactive({
+		predictions <- gdt_predictions()
+		if(is.null(predictions)){
+			return(NULL)
+		}
+		return(predictions$advice)
+	})
+
+	gdt_pred_score <- reactive({
+		predictions <- gdt_predictions()
+		if(is.null(predictions)){
+			return(NULL)
+		}
+		homeScore <- round(as.numeric(str_replace(prediction$goals_home, '-', '')), digits = 1)
+		awayScore <- round(as.numeric(str_replace(prediction$goals_away, '-', '')), digits = 1)
+		return(paste0('Score: ', homeScore, '-', awayScore))
+	})
+
+	gdt_pred_pcts <- reactive({
+		predictions <- gdt_predictions()
+		if(is.null(predictions)){
+			return(NULL)
+		}
+		if(is.null(prediction$winning_percent)){
+			return(NULL)
+		}
+		homePct <- prediction$winning_percent$home
+		drawPct <- prediction$winning_percent$draws
+		awayPct <- prediction$winning_percent$away
+		return(paste0(homePct, '-', drawPct, '-', awayPct))
+	})
+
 	gdt_odds <- reactive({
 		print('gdt_odds')
 		fixtureId <- selectedDetailedFixtureId()
@@ -330,6 +393,8 @@ server <- function(input, output, session) {
 	output$gdt_awayTeamName <- renderText(paste0('<h2>', gdt_awayTeamName(), '</h2>'))
 	output$gdt_homeTeamLogo <- renderText(paste0('<img style="width:120px;" src="', gdt_homeTeamLogo(), '"></img>'))
 	output$gdt_awayTeamLogo <- renderText(paste0('<img style="width:120px;" src="', gdt_awayTeamLogo(), '"></img>'))
+	output$gdt_advice <- renderText(paste0('Prediction: ', gdt_pred_advice(), '<br />', gdt_pred_score()))
+	output$gdt_pred_pcts <-  renderText(paste0('Home-Draw-Away<br/>', gdt_pred_pcts()))
 
 	gdt_odds_winner <- reactive({
 		print('gdt_odds_winner')
@@ -354,7 +419,7 @@ server <- function(input, output, session) {
 			mutate(AwayProb = round(100 * (1/Away) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
 				   DrawProb = round(100 * (1/Draw) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
 				   HomeProb = round(100 * (1/Home) / ((1/Away)+(1/Draw)+1/Home), digits = 1)) %>%
-			select(-BookmakerId) %>%
+			select(BookmakerName, Home, Draw, Away, HomeProb, DrawProb, AwayProb) %>%
 			arrange(BookmakerName)
 		print('gdt_odds_winner: got odds')
 		return(result)
