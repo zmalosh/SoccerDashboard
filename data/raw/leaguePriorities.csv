@@ -3,8 +3,8 @@ LeagueName,Country,IsMajor,Priority,Confederation
 Superliga,Albania,FALSE,,UEFA
 Ligue 1,Algeria,FALSE,,CAF
 Ligue 2,Algeria,FALSE,,CAF
-1a Divisió,Andorra,FALSE,,UEFA
-2a Divisió,Andorra,FALSE,,UEFA
+1a DivisiÃ³,Andorra,FALSE,,UEFA
+2a DivisiÃ³,Andorra,FALSE,,UEFA
 Girabola,Angola,FALSE,,CAF
 Copa Argentina,Argentina,FALSE,,CONMEBOL
 Primera B Nacional,Argentina,FALSE,,CONMEBOL
@@ -38,7 +38,7 @@ Premier League,Belize,FALSE,,CONCACAF
 Championnat National,Benin,FALSE,,CAF
 Premier League,Bermuda,FALSE,,CONCACAF
 Super League,Bhutan,FALSE,,AFC
-Primera División,Bolivia,FALSE,,CONMEBOL
+Primera DivisiÃ³n,Bolivia,FALSE,,CONMEBOL
 Cup,Bosnia,FALSE,,UEFA
 Premijer Liga,Bosnia,FALSE,,UEFA
 Premier League,Botswana,FALSE,,CAF
@@ -122,8 +122,8 @@ Division d'Honneur,Guadeloupe,FALSE,,CONCACAF
 Liga Nacional,Guatemala,FALSE,,CONCACAF
 Primera Division,Guatemala,FALSE,,CONCACAF
 Ligue 1,Guinea,FALSE,,CONCACAF
-Ligue Haïtienne,Haiti,FALSE,,CONCACAF
-Liga Nacional de Fútbol,Honduras,FALSE,,CONCACAF
+Ligue HaÃ¯tienne,Haiti,FALSE,,CONCACAF
+Liga Nacional de FÃºtbol,Honduras,FALSE,,CONCACAF
 HKFA 1st Division,Hong-Kong,FALSE,,AFC
 Premier League,Hong-Kong,FALSE,,AFC
 Magyar Kupa,Hungary,FALSE,,UEFA
@@ -205,7 +205,7 @@ Eliteserien,Norway,FALSE,,UEFA
 NM Cupen,Norway,FALSE,,UEFA
 OBOS-ligaen,Norway,FALSE,,UEFA
 Professional League,Oman,FALSE,,AFC
-Liga Panameña de Fútbol,Panama,FALSE,,CONCACAF
+Liga PanameÃ±a de FÃºtbol,Panama,FALSE,,CONCACAF
 Primera Division - Apertura,Paraguay,FALSE,,CONMEBOL
 Primera Division - Clausura,Paraguay,FALSE,,CONMEBOL
 Segunda Division,Paraguay,FALSE,,CONMEBOL
@@ -216,11 +216,11 @@ Ekstraklasa,Poland,FALSE,,UEFA
 I Liga,Poland,FALSE,,UEFA
 Liga de Honra,Portugal,FALSE,,UEFA
 Primeira Liga,Portugal,TRUE,21,UEFA
-Taça da Liga,Portugal,FALSE,,UEFA
-Taça de Portugal,Portugal,FALSE,,UEFA
+TaÃ§a da Liga,Portugal,FALSE,,UEFA
+TaÃ§a de Portugal,Portugal,FALSE,,UEFA
 2nd Division League,Qatar,FALSE,,AFC
 Stars League,Qatar,FALSE,,AFC
-Cupa României,Romania,FALSE,,UEFA
+Cupa RomÃ¢niei,Romania,FALSE,,UEFA
 Liga I,Romania,FALSE,,UEFA
 Liga II,Romania,FALSE,,UEFA
 Cup,Russia,FALSE,,UEFA
