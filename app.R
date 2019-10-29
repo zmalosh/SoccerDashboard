@@ -70,6 +70,10 @@ ui <- fluidPage(
 			 				 fluidRow(
 			 				 	htmlOutput('gdt_odds_total_title'),
 			 				 	DT::dataTableOutput('gdt_odds_total')
+			 				 ),
+			 				 fluidRow(
+			 				 	htmlOutput('gdt_odds_spread_title'),
+			 				 	DT::dataTableOutput('gdt_odds_spread')
 			 				 )
 			 		)
 			 	)
@@ -651,10 +655,56 @@ server <- function(input, output, session) {
 		return('<h4>Total Goals</h4>')
 	})
 
+	gdt_odds_spread <- reactive({
+		print('gdt_odds_spread')
+		allOdds <- gdt_odds()
+		if(is.null(allOdds)){
+			print('gdt_odds_spread: null allOdds')
+			return(NULL)
+		}
+		if(nrow(allOdds) == 0){
+			print('gdt_odds_spread: no allOdds rows')
+			return(NULL)
+		}
+		odds <- allOdds %>% filter(BetTypeId == 9)
+		if(nrow(odds) == 0){
+			print('gdt_odds_spread: no odds rows')
+			return(NULL)
+		}
+		result <- odds %>%
+			mutate(Value = str_replace(MarketName, 'Home ', '') %>% str_replace(., 'Away ', '') %>% str_replace(., 'Draw ', '') %>% as.numeric(),
+				   Choice = ifelse(str_detect(MarketName, 'Home'), 'Home', ifelse(str_detect(MarketName, 'Away'), 'Away', 'Draw'))) %>%
+			group_by(BookmakerId, BookmakerName, Value, Choice) %>%
+			summarise(Line = min(MarketLine)) %>%
+			pivot_wider(names_from = Choice, values_from = Line) %>%
+			mutate(Home = as.numeric(Home),
+				   Draw = as.numeric(Draw),
+				   Away = as.numeric(Away),
+				   HomeProb = round(100 * (1/Home) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
+				   DrawProb = round(100 * (1/Draw) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
+				   AwayProb = round(100 * (1/Away) / ((1/Away)+(1/Draw)+1/Home), digits = 1)) %>%
+			ungroup() %>%
+			select(BookmakerName, Value, Home, Draw, Away, HomeProb, DrawProb, AwayProb) %>%
+			arrange(BookmakerName)
+		print('gdt_odds_total: got odds')
+		return(result)
+	})
+
+	gdt_odds_spread_title <- reactive({
+		print('gdt_odds_spread_title')
+		odds <- gdt_odds_spread()
+		if(is.null(odds)){
+			return(NULL)
+		}
+		return('<h4>Spread</h4>')
+	})
+
 	output$gdt_odds_winner <- DT::renderDataTable(DT::datatable(gdt_odds_winner(), escape = FALSE, options = list(pageLength = 1000, lengthMenu = c(25, 50, 100, 250, 500, 1000))))
 	output$gdt_odds_winner_title <- renderText(gdt_odds_winner_title())
 	output$gdt_odds_total <- DT::renderDataTable(DT::datatable(gdt_odds_total(), escape = FALSE, options = list(pageLength = 1000, lengthMenu = c(25, 50, 100, 250, 500, 1000))))
 	output$gdt_odds_total_title <- renderText(gdt_odds_total_title())
+	output$gdt_odds_spread <- DT::renderDataTable(DT::datatable(gdt_odds_spread(), escape = FALSE, options = list(pageLength = 1000, lengthMenu = c(25, 50, 100, 250, 500, 1000))))
+	output$gdt_odds_spread_title <- renderText(gdt_odds_spread_title())
 
 }
 
