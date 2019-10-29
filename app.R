@@ -117,7 +117,6 @@ server <- function(input, output, session) {
 	output$dateOutput <- renderText(format(input$GameDateInput, '%Y-%m-%d'))
 
 	leaguePriorities <- reactive({
-		print('leaguePriorities')
 		leaguePriorities <- readr::read_csv(file =  'data/raw/leaguePriorities.csv',
 											col_types = cols(
 												LeagueName = col_character(),
@@ -130,7 +129,6 @@ server <- function(input, output, session) {
 	})
 
 	leagues <- reactive({
-		print('leagues')
 		leaguePriorities <- leaguePriorities()
 		if(is.null(leaguePriorities) || nrow(leaguePriorities) == 0){
 			return(NULL)
@@ -147,7 +145,6 @@ server <- function(input, output, session) {
 	})
 
 	gameDate <- reactive({
-		print('gameDate')
 		if(is.null(input$GameDateInput)){
 			return(NULL)
 		}
@@ -155,7 +152,6 @@ server <- function(input, output, session) {
 	})
 
 	dateGames <- reactive({
-		print('dateGames')
 		leagues <- leagues()
 		if(is.null(leagues) || nrow(leagues) == 0){
 			return(NULL)
@@ -170,7 +166,6 @@ server <- function(input, output, session) {
 	})
 
 	leagueOptions <- reactive({
-		print('leagueOptions')
 		dateGames <- dateGames()
 		if(is.null(dateGames)){
 			leagueOptions <- list('ALL LEAGUES GOOD' = notSelectedVal)
@@ -198,12 +193,10 @@ server <- function(input, output, session) {
 	})
 
 	output$LeagueIdUI <- renderUI({
-		print('output$LeagueIdUI')
 		selectInput('LeagueId', 'Leagues', leagueOptions())
 	})
 
 	selectedLeagueId <- reactive({
-		print('selectedLeagueId')
 		if(is.null(input$LeagueId)){
 			return(NULL)
 		}
@@ -211,7 +204,6 @@ server <- function(input, output, session) {
 	})
 
 	predictions <- reactive({
-		print('predictions')
 		dateGames <- dateGames()
 		if(is.null(dateGames) || nrow(dateGames) == 0){
 			return(NULL)
@@ -245,7 +237,6 @@ server <- function(input, output, session) {
 	})
 
 	dateGamesDisplay <- reactive({
-		print('dateGamesDisplay')
 		leagues <- leagues()
 		dateGames <- dateGames()
 		if(is.null(leagues) || nrow(leagues) == 0 || is.null(dateGames) || nrow(dateGames) == 0){
@@ -318,7 +309,6 @@ server <- function(input, output, session) {
 	####
 
 	gameSummary <- reactive({
-		print('gameSummary')
 		fixtureId <- selectedDetailedFixtureId()
 		if(is.null(fixtureId) || is.na(fixtureId)){
 			return(NULL)
@@ -335,7 +325,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_homeTeamName <- reactive({
-		print('gdt_homeTeamName')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary)){
 			return(NULL)
@@ -344,7 +333,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_homeTeamLogo <- reactive({
-		print('gdt_homeTeamLogo')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary)){
 			return(NULL)
@@ -353,7 +341,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_awayTeamName <- reactive({
-		print('gdt_awayTeamName')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary)){
 			return(NULL)
@@ -362,7 +349,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_awayTeamLogo <- reactive({
-		print('gdt_awayTeamLogo')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary)){
 			return(NULL)
@@ -371,7 +357,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_referee <- reactive({
-		print('gdt_referee')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary) || is.null(gameSummary$Referee) || is.na(gameSummary$Referee)){
 			return(NULL)
@@ -380,7 +365,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_venue <- reactive({
-		print('gdt_venue')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary) || is.null(gameSummary$Venue) || is.na(gameSummary$Venue)){
 			return(NULL)
@@ -389,7 +373,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_round <- reactive({
-		print('gdt_round')
 		gameSummary <- gameSummary()
 		if(is.null(gameSummary) || is.null(gameSummary$Round) || is.na(gameSummary$Round)){
 			return(NULL)
@@ -398,7 +381,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_predictions <- reactive({
-		print('gdt_predictions')
 		fixtureId <- selectedDetailedFixtureId()
 		if(is.null(fixtureId) || is.na(fixtureId)){
 			return(NULL)
@@ -444,7 +426,6 @@ server <- function(input, output, session) {
 	####
 
 	gdt_form_home_team <- reactive({
-		print('gdt_form_home_team')
 		predictions <- gdt_predictions()
 		if(is.null(predictions)){
 			return(NULL)
@@ -458,7 +439,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_form_away_team <- reactive({
-		print('gdt_form_away_team')
 		predictions <- gdt_predictions()
 		if(is.null(predictions)){
 			return(NULL)
@@ -472,7 +452,6 @@ server <- function(input, output, session) {
 	})
 
 	gdt_form_last_five <- reactive({
-		print('gdt_form_last_five')
 		home <- gdt_form_home_team()
 		if(is.null(home) || is.null(home$last_5_matches)){
 			return(NULL)
@@ -577,22 +556,17 @@ server <- function(input, output, session) {
 	####
 
 	gdt_odds <- reactive({
-		print('gdt_odds')
 		fixtureId <- selectedDetailedFixtureId()
 		if(is.null(fixtureId)){
-			print('gdt_odds:null fixtureId')
 			return(NULL)
 		}
 		odds <- get_odds_by_fixture(fixtureId)
 		if(is.null(odds)){
-			print('gdt_odds:null odds')
 			return(NULL)
 		}
 		if(nrow(odds) == 0){
-			print('gdt_odds:no rows for odds')
 			return(NULL)
 		}
-		print('gdt_odds:got the odds')
 		return(odds)
 	})
 
@@ -607,19 +581,15 @@ server <- function(input, output, session) {
 	output$gdt_referee <- renderText(gdt_referee())
 
 	gdt_odds_winner <- reactive({
-		print('gdt_odds_winner')
 		allOdds <- gdt_odds()
 		if(is.null(allOdds)){
-			print('gdt_odds_winner: null allOdds')
 			return(NULL)
 		}
 		if(nrow(allOdds) == 0){
-			print('gdt_odds_winner: no allOdds rows')
 			return(NULL)
 		}
 		odds <- allOdds %>% filter(BetTypeId == 1)
 		if(nrow(odds) == 0){
-			print('gdt_odds_winner: no odds rows')
 			return(NULL)
 		}
 		result <- odds %>%
@@ -635,12 +605,10 @@ server <- function(input, output, session) {
 			ungroup() %>%
 			select(BookmakerName, Home, Draw, Away, HomeProb, DrawProb, AwayProb) %>%
 			arrange(BookmakerName)
-		print('gdt_odds_winner: got odds')
 		return(result)
 	})
 
 	gdt_odds_winner_title <- reactive({
-		print('gdt_odds_winner_title')
 		odds <- gdt_odds_winner()
 		if(is.null(odds)){
 			return(NULL)
@@ -649,19 +617,15 @@ server <- function(input, output, session) {
 	})
 
 	gdt_odds_total <- reactive({
-		print('gdt_odds_total')
 		allOdds <- gdt_odds()
 		if(is.null(allOdds)){
-			print('gdt_odds_total: null allOdds')
 			return(NULL)
 		}
 		if(nrow(allOdds) == 0){
-			print('gdt_odds_total: no allOdds rows')
 			return(NULL)
 		}
 		odds <- allOdds %>% filter(BetTypeId == 5)
 		if(nrow(odds) == 0){
-			print('gdt_odds_total: no odds rows')
 			return(NULL)
 		}
 		result <- odds %>%
@@ -677,12 +641,10 @@ server <- function(input, output, session) {
 			ungroup() %>%
 			select(BookmakerName, Value, Over, Under, OverProb, UnderProb) %>%
 			arrange(BookmakerName)
-		print('gdt_odds_total: got odds')
 		return(result)
 	})
 
 	gdt_odds_total_title <- reactive({
-		print('gdt_odds_total_title')
 		odds <- gdt_odds_total()
 		if(is.null(odds)){
 			return(NULL)
@@ -691,19 +653,15 @@ server <- function(input, output, session) {
 	})
 
 	gdt_odds_spread <- reactive({
-		print('gdt_odds_spread')
 		allOdds <- gdt_odds()
 		if(is.null(allOdds)){
-			print('gdt_odds_spread: null allOdds')
 			return(NULL)
 		}
 		if(nrow(allOdds) == 0){
-			print('gdt_odds_spread: no allOdds rows')
 			return(NULL)
 		}
 		odds <- allOdds %>% filter(BetTypeId == 9)
 		if(nrow(odds) == 0){
-			print('gdt_odds_spread: no odds rows')
 			return(NULL)
 		}
 		result <- odds %>%
@@ -721,12 +679,10 @@ server <- function(input, output, session) {
 			ungroup() %>%
 			select(BookmakerName, Value, Home, Draw, Away, HomeProb, DrawProb, AwayProb) %>%
 			arrange(BookmakerName)
-		print('gdt_odds_total: got odds')
 		return(result)
 	})
 
 	gdt_odds_spread_title <- reactive({
-		print('gdt_odds_spread_title')
 		odds <- gdt_odds_spread()
 		if(is.null(odds)){
 			return(NULL)
