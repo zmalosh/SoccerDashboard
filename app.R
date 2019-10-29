@@ -46,8 +46,8 @@ ui <- fluidPage(
 				 		   htmlOutput('gdt_awayTeamLogo'))
 				 ),
 				 fluidRow(
-				 	column(3,
-				 		   plotOutput('gdt_last_five_form_graph', height = '200px'))
+				 	column(6,
+				 		   plotOutput('gdt_last_five_form_graph', height = '250px'))
 				 ),
 				 fluidRow(
 				 	htmlOutput('gdt_advice'),
@@ -327,7 +327,7 @@ server <- function(input, output, session) {
 		if(is.null(gameSummary)){
 			return(NULL)
 		}
-		return(gameSummary$HomeTeamName)
+		return(paste(gameSummary$HomeTeamName, '(H)'))
 	})
 
 	gdt_homeTeamLogo <- reactive({
@@ -345,7 +345,7 @@ server <- function(input, output, session) {
 		if(is.null(gameSummary)){
 			return(NULL)
 		}
-		return(gameSummary$AwayTeamName)
+		return(paste(gameSummary$AwayTeamName, '(A)'))
 	})
 
 	gdt_awayTeamLogo <- reactive({
@@ -520,11 +520,12 @@ server <- function(input, output, session) {
 				Competition = LeagueName,
 				WinnerName = ifelse(HomeScore > AwayScore, HomeName, ifelse(HomeScore < AwayScore, AwayName, 'Draw')),
 				WinnerLogo = ifelse(HomeScore > AwayScore, HomeLogo, ifelse(HomeScore < AwayScore, AwayLogo, draw_image_url)),
-				Result = paste0(HomeScore, '-', AwayScore, '&nbsp;<img src="', WinnerLogo, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', WinnerName, '</span>'),
+				Score = paste0(HomeScore, '-', AwayScore),
+				Winner = paste0('<img src="', WinnerLogo, '" height="', tableLogoHeight, '"></img>&nbsp;<span>', WinnerName, '</span>'),
 				Venue = venue,
 				Referee = referee
 			) %>%
-			select(Competition, HomeTeam, AwayTeam, Result, Status, GameDate, Venue, Referee) %>%
+			select(Competition, HomeTeam, AwayTeam, Score, Winner, Status, GameDate, Venue, Referee) %>%
 			arrange(desc(GameDate))
 		return(display)
 	})
