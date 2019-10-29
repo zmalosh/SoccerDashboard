@@ -1,207 +1,174 @@
 LeagueName,Country,IsMajor,Priority,Confederation
-Superliga,Albania,FALSE,,UEFA
 1st Division,Albania,FALSE,,UEFA
+Superliga,Albania,FALSE,,UEFA
 Ligue 1,Algeria,FALSE,,CAF
 Ligue 2,Algeria,FALSE,,CAF
 1a Divisió,Andorra,FALSE,,UEFA
 2a Divisió,Andorra,FALSE,,UEFA
-1a Divisió,Andorra,FALSE,,UEFA
 Girabola,Angola,FALSE,,CAF
-Girabola,Angola,FALSE,,CAF
-Primera Division,Argentina,TRUE,25,CONMEBOL
-Primera B Nacional,Argentina,FALSE,,CONMEBOL
 Copa Argentina,Argentina,FALSE,,CONMEBOL
-Premier League,Armenia,FALSE,,UEFA
-First League,Armenia,FALSE,,UEFA
+Primera B Nacional,Argentina,FALSE,,CONMEBOL
+Primera Division,Argentina,TRUE,25,CONMEBOL
 First League,Armenia,FALSE,,UEFA
 Premier League,Armenia,FALSE,,UEFA
 A-League,Australia,TRUE,24,AFC
-National Premier Leagues,Australia,FALSE,,AFC
-W-League,Australia,FALSE,,AFC
 Brisbane Premier League,Australia,FALSE,,AFC
+National Premier Leagues,Australia,FALSE,,AFC
 New South Wales NPL,Australia,FALSE,,AFC
 Northern Territory Premier League,Australia,FALSE,,AFC
 South Australia NPL,Australia,FALSE,,AFC
 Victoria NPL,Australia,FALSE,,AFC
 Western Australia NPL,Australia,FALSE,,AFC
 W-League,Australia,FALSE,,AFC
-Tipp3 Bundesliga,Austria,TRUE,28,UEFA
-Erste Liga,Austria,FALSE,,UEFA
 Cup,Austria,FALSE,,UEFA
+Erste Liga,Austria,FALSE,,UEFA
+Tipp3 Bundesliga,Austria,TRUE,28,UEFA
 Birinci Dasta,Azerbaidjan,FALSE,,UEFA
-Premyer Liqa,Azerbaidjan,FALSE,,UEFA
 Cup,Azerbaidjan,FALSE,,UEFA
-Birinci Dasta,Azerbaidjan,FALSE,,UEFA
-Premier League,Bahrain,FALSE,,AFC
+Premyer Liqa,Azerbaidjan,FALSE,,UEFA
 Premier League,Bahrain,FALSE,,AFC
 Premier League,Bangladesh,FALSE,,AFC
-Premier League,Bangladesh,FALSE,,AFC
-Vyscha Liga,Belarus,FALSE,,UEFA
 1. Division,Belarus,FALSE,,UEFA
-Jupiler Pro League,Belgium,TRUE,23,UEFA
+Vyscha Liga,Belarus,FALSE,,UEFA
 2e Klasse,Belgium,FALSE,,UEFA
-Super League Women,Belgium,FALSE,,UEFA
 Cup,Belgium,FALSE,,UEFA
+Jupiler Pro League,Belgium,TRUE,23,UEFA
 Super League Women,Belgium,FALSE,,UEFA
-Premier League,Belize,FALSE,,CONCACAF
 Premier League,Belize,FALSE,,CONCACAF
 Championnat National,Benin,FALSE,,CAF
 Premier League,Bermuda,FALSE,,CONCACAF
 Super League,Bhutan,FALSE,,AFC
 Primera División,Bolivia,FALSE,,CONMEBOL
-Primera División,Bolivia,FALSE,,CONMEBOL
 Cup,Bosnia,FALSE,,UEFA
 Premijer Liga,Bosnia,FALSE,,UEFA
 Premier League,Botswana,FALSE,,CAF
-Premier League,Botswana,FALSE,,CAF
+Brasileiro Women,Brazil,FALSE,,CONMEBOL
+Copa Do Brasil,Brazil,FALSE,,CONMEBOL
 Serie A,Brazil,TRUE,26,CONMEBOL
 Serie B,Brazil,FALSE,,CONMEBOL
-Copa Do Brasil,Brazil,FALSE,,CONMEBOL
-Brasileiro Women,Brazil,FALSE,,CONMEBOL
-Brasileiro Women,Brazil,FALSE,,CONMEBOL
 A PFG,Bulgaria,FALSE,,UEFA
 B PFG,Bulgaria,FALSE,,UEFA
 Cup,Bulgaria,FALSE,,UEFA
 C-League,Cambodia,FALSE,,CAF
 Elite ONE,Cameroon,FALSE,,CAF
-Elite ONE,Cameroon,FALSE,,CAF
-Canadian Soccer League,Canada,FALSE,,CONCACAF
 Canadian Championship,Canada,FALSE,,CONCACAF
+Canadian Soccer League,Canada,FALSE,,CONCACAF
 Pacific Coast Soccer League,Canada,FALSE,,CONCACAF
-Primera Division,Chile,TRUE,27,CONMEBOL
-Primera B,Chile,FALSE,,CONMEBOL
 Copa Chile,Chile,FALSE,,CONMEBOL
-Super League,China,FALSE,,AFC
-League One,China,FALSE,,AFC
+Primera B,Chile,FALSE,,CONMEBOL
+Primera Division,Chile,TRUE,27,CONMEBOL
 FA Cup,China,FALSE,,AFC
+League One,China,FALSE,,AFC
+Super League,China,FALSE,,AFC
+Copa Colombia,Colombia,FALSE,,CONMEBOL
 Primera A,Colombia,FALSE,,CONMEBOL
 Primera B,Colombia,FALSE,,CONMEBOL
-Copa Colombia,Colombia,FALSE,,CONMEBOL
-Primera Division,Costa-Rica,FALSE,,CONCACAF
 Liga De Ascenso,Costa-Rica,FALSE,,CONCACAF
-Prva HNL,Croatia,FALSE,,UEFA
-Druga HNL,Croatia,FALSE,,UEFA
+Primera Division,Costa-Rica,FALSE,,CONCACAF
 Cup,Croatia,FALSE,,UEFA
+Druga HNL,Croatia,FALSE,,UEFA
+Prva HNL,Croatia,FALSE,,UEFA
 1. Division,Cyprus,FALSE,,UEFA
 2. Division,Cyprus,FALSE,,UEFA
 3. Division,Cyprus,FALSE,,UEFA
 Cup,Cyprus,FALSE,,UEFA
+Cup,Czech-Republic,FALSE,,UEFA
 Czech Liga,Czech-Republic,FALSE,,UEFA
 FNL,Czech-Republic,FALSE,,UEFA
-Cup,Czech-Republic,FALSE,,UEFA
+DBU Pokalen,Denmark,FALSE,,UEFA
 Superligaen,Denmark,FALSE,,UEFA
 Viasat Divisionen,Denmark,FALSE,,UEFA
-DBU Pokalen,Denmark,FALSE,,UEFA
 Serie A,Ecuador,FALSE,,CONMEBOL
 Serie B,Ecuador,FALSE,,CONMEBOL
 Premier League,Egypt,FALSE,,CAF
 Primera Division,El-Salvador,FALSE,,CONCACAF
-Premier League,England,TRUE,12,UEFA
 Championship,England,FALSE,,UEFA
+EFL Trophy,England,FALSE,,UEFA
+FA Cup,England,TRUE,29,UEFA
+FA Trophy,England,FALSE,,UEFA
+FA WSL,England,FALSE,,UEFA
+League Cup,England,FALSE,,UEFA
 League One,England,FALSE,,UEFA
 League Two,England,FALSE,,UEFA
 National League,England,FALSE,,UEFA
-FA WSL,England,FALSE,,UEFA
-FA Cup,England,TRUE,29,UEFA
-FA WSL,England,FALSE,,UEFA
-EFL Trophy,England,FALSE,,UEFA
-FA Trophy,England,FALSE,,UEFA
-League Cup,England,FALSE,,UEFA
+Premier League,England,TRUE,12,UEFA
 Esiliiga A,Estonia,FALSE,,UEFA
 Meistriliiga,Estonia,FALSE,,UEFA
 Premier League,Ethiopia,FALSE,,CAF
 1. Deild,Faroe-Islands,FALSE,,UEFA
-1. Deild,Faroe-Islands,FALSE,,UEFA
-Meistaradeildin,Faroe-Islands,FALSE,,UEFA
 Meistaradeildin,Faroe-Islands,FALSE,,UEFA
 National Football League,Fiji,FALSE,,AFC
-National Football League,Fiji,FALSE,,AFC
+Suomen Cup,Finland,FALSE,,UEFA
 Veikkausliiga,Finland,FALSE,,UEFA
 Ykkonen,Finland,FALSE,,UEFA
-Suomen Cup,Finland,FALSE,,UEFA
+Coupe de France,France,FALSE,,UEFA
+Coupe de la Ligue,France,FALSE,,UEFA
+Feminine Division 1,France,FALSE,,UEFA
 Ligue 1,France,TRUE,18,UEFA
 Ligue 2,France,FALSE,,UEFA
 National,France,FALSE,,UEFA
-Feminine Division 1,France,FALSE,,UEFA
-Coupe de la Ligue,France,FALSE,,UEFA
-Coupe de France,France,FALSE,,UEFA
-Feminine Division 1,France,FALSE,,UEFA
-Erovnuli Liga 2,Georgia,FALSE,,UEFA
 Erovnuli Liga,Georgia,FALSE,,UEFA
+Erovnuli Liga 2,Georgia,FALSE,,UEFA
 Bundesliga 1,Germany,TRUE,17,UEFA
 Bundesliga 2,Germany,FALSE,,UEFA
-Liga 3,Germany,FALSE,,UEFA
 DFB Pokal,Germany,FALSE,,UEFA
+Liga 3,Germany,FALSE,,UEFA
 Women Bundesliga,Germany,FALSE,,UEFA
-Women Bundesliga,Germany,FALSE,,UEFA
-Super League,Greece,FALSE,,UEFA
-Football League,Greece,FALSE,,UEFA
-Football League,Greece,FALSE,,UEFA
 Cup,Greece,FALSE,,UEFA
+Football League,Greece,FALSE,,UEFA
+Football League,Greece,FALSE,,UEFA
+Super League,Greece,FALSE,,UEFA
 Division d'Honneur,Guadeloupe,FALSE,,CONCACAF
-Division d'Honneur,Guadeloupe,FALSE,,CONCACAF
-Primera Division,Guatemala,FALSE,,CONCACAF
 Liga Nacional,Guatemala,FALSE,,CONCACAF
+Primera Division,Guatemala,FALSE,,CONCACAF
 Ligue 1,Guinea,FALSE,,CONCACAF
-Ligue 1,Guinea,FALSE,,CONCACAF
-Ligue Haïtienne,Haiti,FALSE,,CONCACAF
 Ligue Haïtienne,Haiti,FALSE,,CONCACAF
 Liga Nacional de Fútbol,Honduras,FALSE,,CONCACAF
-Premier League,Hong-Kong,FALSE,,AFC
 HKFA 1st Division,Hong-Kong,FALSE,,AFC
+Premier League,Hong-Kong,FALSE,,AFC
+Magyar Kupa,Hungary,FALSE,,UEFA
 NB I,Hungary,FALSE,,UEFA
 NB II,Hungary,FALSE,,UEFA
-Magyar Kupa,Hungary,FALSE,,UEFA
-Premier,Iceland,FALSE,,UEFA
+Cup,Iceland,FALSE,,UEFA
 Division 1,Iceland,FALSE,,UEFA
 Division 2,Iceland,FALSE,,UEFA
-Division 2,Iceland,FALSE,,UEFA
-Cup,Iceland,FALSE,,UEFA
 League Cup,Iceland,FALSE,,UEFA
-Indian Super League,India,FALSE,,AFC
+Premier,Iceland,FALSE,,UEFA
 I-League,India,FALSE,,AFC
+Indian Super League,India,FALSE,,AFC
 Santosh Trophy,India,FALSE,,AFC
-Super League,Indonesia,FALSE,,AFC
 Liga 2,Indonesia,FALSE,,AFC
-Persian Gulf Cup,Iran,FALSE,,AFC
+Super League,Indonesia,FALSE,,AFC
 Azadegan League,Iran,FALSE,,AFC
-Premier Division,Ireland,FALSE,,UEFA
-First Division,Ireland,FALSE,,UEFA
+Persian Gulf Cup,Iran,FALSE,,AFC
 FAI Cup,Ireland,FALSE,,UEFA
+First Division,Ireland,FALSE,,UEFA
 League Cup,Ireland,FALSE,,UEFA
+Premier Division,Ireland,FALSE,,UEFA
 Liga Leumit,Israel,FALSE,,UEFA
-Liga Leumit,Israel,FALSE,,UEFA
-Ligat ha'Al,Israel,FALSE,,UEFA
 Ligat ha'Al,Israel,FALSE,,UEFA
 State Cup,Israel,FALSE,,UEFA
 Toto Cup Ligat Al,Israel,FALSE,,UEFA
-Serie A,Italy,TRUE,16,UEFA
-Serie B,Italy,FALSE,,UEFA
 Coppa Italia,Italy,FALSE,,UEFA
+Serie A,Italy,TRUE,16,UEFA
+Serie A Women,Italy,FALSE,,UEFA
+Serie B,Italy,FALSE,,UEFA
 Serie C,Italy,FALSE,,UEFA
-Serie A Women,Italy,FALSE,,UEFA
-Serie A Women,Italy,FALSE,,UEFA
 Ligue 1,Ivory-Coast,FALSE,,CAF
 Premier League,Jamaica,FALSE,,CONCACAF
-Premier League,Jamaica,FALSE,,CONCACAF
+Emperor Cup,Japan,FALSE,,AFC
 J. League Div.1,Japan,FALSE,,AFC
 J. League Div.2,Japan,FALSE,,AFC
 J. League Div.3,Japan,FALSE,,AFC
-J. League Div.3,Japan,FALSE,,AFC
 J-League Cup,Japan,FALSE,,AFC
-Emperor Cup,Japan,FALSE,,AFC
 Division 1,Jordan,FALSE,,AFC
 1. Division,Kazakhstan,FALSE,,UEFA
-1. Division,Kazakhstan,FALSE,,UEFA
-Premier League,Kazakhstan,FALSE,,UEFA
 Premier League,Kazakhstan,FALSE,,UEFA
 Premier League,Kenya,FALSE,,CAF
 Super League,Kenya,FALSE,,CAF
-Premier League,Kuwait,FALSE,,CAF
 Division 1,Kuwait,FALSE,,CAF
+Premier League,Kuwait,FALSE,,CAF
 1. Liga,Latvia,FALSE,,UEFA
-1. Liga,Latvia,FALSE,,UEFA
-Virsliga,Latvia,FALSE,,UEFA
 Virsliga,Latvia,FALSE,,UEFA
 Premier League,Lebanon,FALSE,,AFC
 1 Lyga,Lithuania,FALSE,,UEFA
@@ -210,150 +177,128 @@ National Division,Luxembourg,FALSE,,UEFA
 First League,Macedonia,FALSE,,UEFA
 Second League,Macedonia,FALSE,,UEFA
 Super League,Malawi,FALSE,,CAF
-Super League,Malawi,FALSE,,CAF
+Premier League,Malaysia,FALSE,,AFC
 Super League,Malaysia,FALSE,,AFC
-Premier League,Malaysia,FALSE,,AFC
-Premier League,Malaysia,FALSE,,AFC
-First Division,Malta,FALSE,,UEFA
 First Division,Malta,FALSE,,UEFA
 Premier League,Malta,FALSE,,UEFA
-Premier League,Malta,FALSE,,UEFA
-Liga MX,Mexico,TRUE,15,CONCACAF
 Ascenso MX,Mexico,FALSE,,CONCACAF
 Copa MX,Mexico,FALSE,,CONCACAF
-Divizia Na<U+021B>ionala,Moldova,FALSE,,UEFA
-Divizia Na<U+021B>ionala,Moldova,FALSE,,UEFA
+Liga MX,Mexico,TRUE,15,CONCACAF
 Divizia A,Moldova,FALSE,,UEFA
+Divizia Na<U+021B>ionala,Moldova,FALSE,,UEFA
 First League,Montenegro,FALSE,,UEFA
 Second League,Montenegro,FALSE,,UEFA
-Botola Pro,Morocco,FALSE,,CAF
 Botola 2,Morocco,FALSE,,CAF
+Botola Pro,Morocco,FALSE,,CAF
 Premier League,Namibia,FALSE,,CAF
-Eredivisie,Netherlands,TRUE,22,UEFA
 Eerste Divisie,Netherlands,FALSE,,UEFA
+Eredivisie,Netherlands,TRUE,22,UEFA
+Eredivisie Women,Netherlands,FALSE,,UEFA
 KNVB Beker,Netherlands,FALSE,,UEFA
-Eredivisie Women,Netherlands,FALSE,,UEFA
-Eredivisie Women,Netherlands,FALSE,,UEFA
 Football Championship,New-Zealand,FALSE,,OFC
-Primera Division,Nicaragua,FALSE,,CONCACAF
 Primera Division,Nicaragua,FALSE,,CONCACAF
 NPFL,Nigeria,FALSE,,CAF
 NPFL,Nigeria,FALSE,,CAF
 Championship,Northern-Ireland,FALSE,,UEFA
 Premiership,Northern-Ireland,FALSE,,UEFA
 Eliteserien,Norway,FALSE,,UEFA
-OBOS-ligaen,Norway,FALSE,,UEFA
 NM Cupen,Norway,FALSE,,UEFA
+OBOS-ligaen,Norway,FALSE,,UEFA
 Professional League,Oman,FALSE,,AFC
 Liga Panameña de Fútbol,Panama,FALSE,,CONCACAF
 Primera Division - Apertura,Paraguay,FALSE,,CONMEBOL
+Primera Division - Clausura,Paraguay,FALSE,,CONMEBOL
 Segunda Division,Paraguay,FALSE,,CONMEBOL
-Primera Division - Clausura,Paraguay,FALSE,,CONMEBOL
-Primera Division - Clausura,Paraguay,FALSE,,CONMEBOL
 Primera Division,Peru,FALSE,,CONMEBOL
 Segunda Division,Peru,FALSE,,CONMEBOL
+Cup,Poland,FALSE,,UEFA
 Ekstraklasa,Poland,FALSE,,UEFA
 I Liga,Poland,FALSE,,UEFA
-Cup,Poland,FALSE,,UEFA
-Primeira Liga,Portugal,TRUE,21,UEFA
 Liga de Honra,Portugal,FALSE,,UEFA
-Taça de Portugal,Portugal,FALSE,,UEFA
+Primeira Liga,Portugal,TRUE,21,UEFA
 Taça da Liga,Portugal,FALSE,,UEFA
-Stars League,Qatar,FALSE,,AFC
+Taça de Portugal,Portugal,FALSE,,UEFA
 2nd Division League,Qatar,FALSE,,AFC
+Stars League,Qatar,FALSE,,AFC
+Cupa României,Romania,FALSE,,UEFA
 Liga I,Romania,FALSE,,UEFA
 Liga II,Romania,FALSE,,UEFA
-Liga II,Romania,FALSE,,UEFA
-Cupa României,Romania,FALSE,,UEFA
-Premier League,Russia,TRUE,20,UEFA
-Football National League,Russia,FALSE,,UEFA
 Cup,Russia,FALSE,,UEFA
+Football National League,Russia,FALSE,,UEFA
+Premier League,Russia,TRUE,20,UEFA
 National Soccer League,Rwanda,FALSE,,CAF
 Campionato,San-Marino,FALSE,,UEFA
-Campionato,San-Marino,FALSE,,UEFA
-Pro League,Saudi-Arabia,FALSE,,AFC
 Division 1,Saudi-Arabia,FALSE,,AFC
 Division 2,Saudi-Arabia,FALSE,,AFC
-Premiership,Scotland,FALSE,,UEFA
+Pro League,Saudi-Arabia,FALSE,,AFC
+Challenge Cup,Scotland,FALSE,,UEFA
 Championship,Scotland,FALSE,,UEFA
 FA Cup,Scotland,FALSE,,UEFA
-Challenge Cup,Scotland,FALSE,,UEFA
+Premiership,Scotland,FALSE,,UEFA
 Ligue 1,Senegal,FALSE,,CAF
-Super Liga,Serbia,FALSE,,UEFA
 Prva Liga,Serbia,FALSE,,UEFA
-Premier League,Singapore,FALSE,,AFC
+Super Liga,Serbia,FALSE,,UEFA
 Premier League,Singapore,FALSE,,AFC
 Super Liga,Slovakia,FALSE,,UEFA
 1. SNL,Slovenia,FALSE,,UEFA
-1. SNL,Slovenia,FALSE,,UEFA
-2. SNL,Slovenia,FALSE,,UEFA
 2. SNL,Slovenia,FALSE,,UEFA
 Cup,Slovenia,FALSE,,UEFA
-Premier Soccer League,South-Africa,FALSE,,CAF
 National First Division,South-Africa,FALSE,,CAF
-K-League Classic,South-Korea,FALSE,,AFC
-K-League Challenge,South-Korea,FALSE,,AFC
+Premier Soccer League,South-Africa,FALSE,,CAF
 FA Cup,South-Korea,FALSE,,AFC
-Primera Division,Spain,TRUE,13,UEFA
-Segunda Division,Spain,FALSE,,UEFA
-Primera Division Women,Spain,FALSE,,UEFA
+K-League Challenge,South-Korea,FALSE,,AFC
+K-League Classic,South-Korea,FALSE,,AFC
 Copa del Rey,Spain,TRUE,30,UEFA
+Primera Division,Spain,TRUE,13,UEFA
 Primera Division Women,Spain,FALSE,,UEFA
+Segunda Division,Spain,FALSE,,UEFA
 Sudani Premier League,Sudan,FALSE,,CAF
 Allsvenskan,Sweden,FALSE,,UEFA
 Superettan,Sweden,FALSE,,UEFA
 Svenska Cupen,Sweden,FALSE,,UEFA
-Super League,Switzerland,FALSE,,UEFA
 Challenge League,Switzerland,FALSE,,UEFA
 Schweizer Pokal,Switzerland,FALSE,,UEFA
-Thai Premier League,Thailand,FALSE,,AFC
-Thai League 2,Thailand,FALSE,,AFC
+Super League,Switzerland,FALSE,,UEFA
 FA Cup,Thailand,FALSE,,AFC
+Thai League 2,Thailand,FALSE,,AFC
+Thai Premier League,Thailand,FALSE,,AFC
 Ligue Professionnelle 1,Tunisia,FALSE,,CAF
  Super Lig,Turkey,TRUE,19,UEFA
+Cup,Turkey,FALSE,,UEFA
 TFF 1. Lig,Turkey,FALSE,,UEFA
 TFF 2. Lig,Turkey,FALSE,,UEFA
-Cup,Turkey,FALSE,,UEFA
-Premier League,Ukraine,FALSE,,UEFA
-Persha Liga,Ukraine,FALSE,,UEFA
 Cup,Ukraine,FALSE,,UEFA
+Persha Liga,Ukraine,FALSE,,UEFA
+Premier League,Ukraine,FALSE,,UEFA
 Arabian Gulf League,United-Arab-Emirates,FALSE,,AFC
 League Cup,United-Arab-Emirates,FALSE,,AFC
 Primera Division - Apertura,Uruguay,FALSE,,CONMEBOL
-Segunda Division,Uruguay,FALSE,,CONMEBOL
-Segunda Division,Uruguay,FALSE,,CONMEBOL
 Primera Division - Clausura,Uruguay,FALSE,,CONMEBOL
+Segunda Division,Uruguay,FALSE,,CONMEBOL
 Major League Soccer,USA,TRUE,14,CONCACAF
 NWSL Women,USA,FALSE,,CONCACAF
 USL Championship,USA,FALSE,,CONCACAF
-USL Championship,USA,FALSE,,CONCACAF
 USL League Two,USA,FALSE,,CONCACAF
-USL League Two,USA,FALSE,,CONCACAF
-Super League,Uzbekistan,FALSE,,AFC
 Super League,Uzbekistan,FALSE,,CONMEBOL
-Primera Division,Venezuela,FALSE,,CONMEBOL
 Primera Division,Venezuela,FALSE,,CONMEBOL
 Segunda Division,Venezuela,FALSE,,CONMEBOL
 V.League 1,Vietnam,FALSE,,AFC
-Premier,Wales,FALSE,,UEFA
 Division 1,Wales,FALSE,,UEFA
+Premier,Wales,FALSE,,UEFA
 Welsh Cup,Wales,FALSE,,UEFA
-World Cup,World,TRUE,1,FIFA
-Champions League,World,TRUE,8,UEFA
-Europa League,World,TRUE,9,UEFA
-Euro Championship,World,TRUE,3,UEFA
-UEFA Nations League,World,TRUE,4,UEFA
 Africa Cup of Nations,World,TRUE,32,CAF
 Asian Cup,World,TRUE,33,AFC
-World Cup Women,World,TRUE,2,FIFA
-Copa America,World,TRUE,7,CONMEBOL
-World Cup,World,TRUE,5,FIFA
-Euro Championship,World,TRUE,6,UEFA
-Friendlies,World,TRUE,34,FIFA
-CONMEBOL Sudamericana,World,TRUE,11,CONMEBOL
 CAF Champions League,World,TRUE,31,CAF
+Champions League,World,TRUE,8,UEFA
 CONMEBOL Libertadores,World,TRUE,10,CONMEBOL
+CONMEBOL Sudamericana,World,TRUE,11,CONMEBOL
+Copa America,World,TRUE,7,CONMEBOL
+Euro Championship,World,TRUE,3,UEFA
+Euro Championship,World,TRUE,6,UEFA
+Europa League,World,TRUE,9,UEFA
+Friendlies,World,TRUE,34,FIFA
+UEFA Nations League,World,TRUE,4,UEFA
+World Cup,World,TRUE,1,FIFA
+World Cup Women,World,TRUE,2,FIFA
 Super League,Zambia,FALSE,,CAF
-Super League,Zambia,FALSE,,CAF
-Premier Soccer League,Zimbabwe,FALSE,,CAF
 Premier Soccer League,Zimbabwe,FALSE,,CAF
