@@ -46,6 +46,11 @@ ui <- fluidPage(
 				 		   htmlOutput('gdt_awayTeamLogo'))
 				 ),
 				 fluidRow(
+				 	htmlOutput('gdt_round'),
+				 	htmlOutput('gdt_venue'),
+				 	htmlOutput('gdt_referee')
+				 ),
+				 fluidRow(
 				 	column(6,
 				 		   plotOutput('gdt_last_five_form_graph', height = '250px'))
 				 ),
@@ -365,6 +370,33 @@ server <- function(input, output, session) {
 		return(gameSummary$AwayTeamLogo)
 	})
 
+	gdt_referee <- reactive({
+		print('gdt_referee')
+		gameSummary <- gameSummary()
+		if(is.null(gameSummary) || is.null(gameSummary$Referee) || is.na(gameSummary$Referee)){
+			return(NULL)
+		}
+		return(paste('Referee:', gameSummary$Referee))
+	})
+
+	gdt_venue <- reactive({
+		print('gdt_venue')
+		gameSummary <- gameSummary()
+		if(is.null(gameSummary) || is.null(gameSummary$Venue) || is.na(gameSummary$Venue)){
+			return(NULL)
+		}
+		return(paste('Venue:', gameSummary$Venue))
+	})
+
+	gdt_round <- reactive({
+		print('gdt_round')
+		gameSummary <- gameSummary()
+		if(is.null(gameSummary) || is.null(gameSummary$Round) || is.na(gameSummary$Round)){
+			return(NULL)
+		}
+		return(paste('Round:', gameSummary$Round))
+	})
+
 	gdt_predictions <- reactive({
 		print('gdt_predictions')
 		fixtureId <- selectedDetailedFixtureId()
@@ -570,6 +602,9 @@ server <- function(input, output, session) {
 	output$gdt_awayTeamLogo <- renderText(paste0('<img style="height:80px;" src="', gdt_awayTeamLogo(), '"></img>'))
 	output$gdt_advice <- renderText(paste0('Prediction: ', gdt_pred_advice(), '<br />', gdt_pred_score()))
 	output$gdt_pred_pcts <-  renderText(paste0('Home-Draw-Away<br/>', gdt_pred_pcts()))
+	output$gdt_round <- renderText(gdt_round())
+	output$gdt_venue <- renderText(gdt_venue())
+	output$gdt_referee <- renderText(gdt_referee())
 
 	gdt_odds_winner <- reactive({
 		print('gdt_odds_winner')
