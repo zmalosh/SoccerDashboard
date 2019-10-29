@@ -12,7 +12,6 @@ library(shiny)
 ui <- fluidPage(
 	tabsetPanel(id='tabs',
 		tabPanel('Games',
-			# Application title
 			titlePanel("Soccer Games"),
 
 			sidebarLayout(
@@ -148,11 +147,17 @@ server <- function(input, output, session) {
 
 	dateGames <- reactive({
 		print('dateGames')
+		leagues <- leagues()
+		if(is.null(leagues) || nrow(leagues) == 0){
+			return(NULL)
+		}
 		gameDate <- gameDate()
 		if(is.null(gameDate)){
 			return(NULL)
 		}
-		dateGames <- get_fixtures_by_date(gameDate, useDataCache)
+		dateGames <- get_fixtures_by_date(gameDate, useDataCache) %>%
+			inner_join(leagues %>% select(LeagueId), by = 'LeagueId')
+		return(dateGames)
 	})
 
 	leagueOptions <- reactive({
@@ -401,6 +406,7 @@ server <- function(input, output, session) {
 	####
 	#### GAME DETAILS TAB - FORM
 	####
+
 	gdt_form_home_team <- reactive({
 		predictions <- gdt_predictions()
 		if(is.null(predictions)){
