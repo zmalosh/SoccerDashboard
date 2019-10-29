@@ -29,7 +29,6 @@ ui <- fluidPage(
 					width = 3
 				),
 
-
 				mainPanel(
 					textOutput('predictionImportStatusOutput'),
 					DT::dataTableOutput('gamesOutput')
@@ -54,11 +53,12 @@ ui <- fluidPage(
 				 	htmlOutput('gdt_pred_pcts')),
 
 			 	tabsetPanel(id = 'GameDetailsDetailTabs',
-			 		tabPanel(value='GameDetailsFormTab',
-			 				 title='Form',
-			 				 fluidRow(HTML('<h4>Form</h4>')),
-			 				 fluidRow(DT::dataTableOutput('gdt_form_display'))
-			 		),
+	 				tabPanel(value='GameDetailsFormTab',
+	 						 title='Form',
+	 						 fluidRow(
+	 						 	column(4, plotOutput('gdt_last_five_form_graph', height = '200px'))
+	 						 )
+	 				),
 			 		tabPanel(value='GameDetailsH2HTab',
 			 				 title='H2H',
 			 				 fluidRow(HTML('<h4>H2H</H4>')),
@@ -408,6 +408,7 @@ server <- function(input, output, session) {
 	####
 
 	gdt_form_home_team <- reactive({
+		print('gdt_form_home_team')
 		predictions <- gdt_predictions()
 		if(is.null(predictions)){
 			return(NULL)
@@ -421,6 +422,7 @@ server <- function(input, output, session) {
 	})
 
 	gdt_form_away_team <- reactive({
+		print('gdt_form_away_team')
 		predictions <- gdt_predictions()
 		if(is.null(predictions)){
 			return(NULL)
@@ -433,7 +435,46 @@ server <- function(input, output, session) {
 		return(team)
 	})
 
-	output$gdt_form_display <- DT::renderDataTable(DT::datatable(gdt_form_home_team(), escape = FALSE, options = list(pageLength = 50, lengthMenu = c(10, 25, 50, 100, 150, 200))))
+	gdt_form_last_five <- reactive({
+		print('gdt_form_last_five')
+		home <- gdt_form_home_team()
+		if(is.null(home) || is.null(home$last_5_matches)){
+			return(NULL)
+		}
+		away <- gdt_form_away_team()
+		if(is.null(away) || is.null(away$last_5_matches)){
+			return(NULL)
+		}
+		lastFive <- data.frame(
+			Team = factor(c('Home','Away','Home','Away','Home','Away','Home','Away','Home','Away')),
+			FormType = factor(c('Form','Form','Att','Att','Def','Def','AvgScored','AvgScored','AvgAllowed','AvgAllowed'), c('Form', 'Att', 'Def', 'AvgScored', 'AvgAllowed')),
+			Value = c(str_replace(home$last_5_matches$forme, '%', '') %>% as.integer(.),
+					  str_replace(away$last_5_matches$forme, '%', '') %>% as.integer(.),
+					  str_replace(home$last_5_matches$att, '%', '') %>% as.integer(.),
+					  str_replace(away$last_5_matches$att, '%', '') %>% as.integer(.),
+					  str_replace(home$last_5_matches$def, '%', '') %>% as.integer(.),
+					  str_replace(away$last_5_matches$def, '%', '') %>% as.integer(.),
+					  home$last_5_matches$goals_avg,
+					  away$last_5_matches$goals_avg,
+					  home$last_5_matches$goals_against_avg,
+					  away$last_5_matches$goals_against_avg)
+		)
+		return(lastFive)
+	})
+
+	output$gdt_last_five_form_graph <- renderPlot({
+		lastFive <- gdt_form_last_five()
+		if(is.null(lastFive)){
+			return(NULL)
+		}
+		df <- lastFive %>% filter(as.character(FormType) %in% c('Att', 'Def', 'Form'))
+		x <- ggplot(data=df, aes(x=FormType, y = Value, fill = Team)) +
+			geom_bar(stat='identity', position=position_dodge()) +
+			ylim(0, 100) +
+			ylab('Form %') +
+			xlab(NULL)
+		x
+	})
 
 	####
 	#### GAME DETAILS TAB - H2H
@@ -543,9 +584,12 @@ server <- function(input, output, session) {
 			group_by(BookmakerId, BookmakerName, MarketName) %>%
 			summarise(Line = min(MarketLine)) %>%
 			pivot_wider(names_from = MarketName, values_from = Line) %>%
-			mutate(AwayProb = round(100 * (1/Away) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
+			mutate(Home = as.numeric(Home),
+				   Draw = as.numeric(Draw),
+				   Away = as.numeric(Away),
+				   HomeProb = round(100 * (1/Home) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
 				   DrawProb = round(100 * (1/Draw) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
-				   HomeProb = round(100 * (1/Home) / ((1/Away)+(1/Draw)+1/Home), digits = 1)) %>%
+				   AwayProb = round(100 * (1/Away) / ((1/Away)+(1/Draw)+1/Home), digits = 1)) %>%
 			select(BookmakerName, Home, Draw, Away, HomeProb, DrawProb, AwayProb) %>%
 			arrange(BookmakerName)
 		print('gdt_odds_winner: got odds')
