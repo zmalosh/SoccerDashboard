@@ -9,24 +9,28 @@
 
 library(shiny)
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(
 	tabsetPanel(id='tabs',
 		tabPanel('Games',
 			# Application title
 			titlePanel("Soccer Games"),
 
-			# Sidebar with a slider input for number of bins
 			sidebarLayout(
 				sidebarPanel(
 					dateInput('GameDateInput', 'Game Date', format = 'yyyy-mm-dd'),
 					uiOutput('LeagueIdUI'),
+					checkboxInput('MajorCompetitionsInput', 'Only Major Leagues', value = TRUE),
+					checkboxInput('ConfederationsInput_UEFA', 'Include UEFA (Europe)', value = TRUE),
+					checkboxInput('ConfederationsInput_CONCACAF', 'Include CONCACAF (N. America)', value = TRUE),
+					checkboxInput('ConfederationsInput_CONMEBOL', 'Include CONMEBOL (S. America)', value = TRUE),
+					checkboxInput('ConfederationsInput_CAF', 'Include CAF (Africa)', value = TRUE),
+					checkboxInput('ConfederationsInput_AFC', 'Include AFC (Asia)', value = TRUE),
+					checkboxInput('ConfederationsInput_OFC', 'Include OFC (Oceania)', value = TRUE),
 					checkboxInput('OddsOnlyInput', 'Only Odds Leagues'),
 					width = 3
 				),
 
 
-				# Show a plot of the generated distribution
 				mainPanel(
 					textOutput('predictionImportStatusOutput'),
 					DT::dataTableOutput('gamesOutput')
@@ -53,7 +57,8 @@ ui <- fluidPage(
 			 	tabsetPanel(id = 'GameDetailsDetailTabs',
 			 		tabPanel(value='GameDetailsFormTab',
 			 				 title='Form',
-			 				 fluidRow(HTML('<h4>Form</h4>'))
+			 				 fluidRow(HTML('<h4>Form</h4>')),
+			 				 fluidRow(DT::dataTableOutput('gdt_form_display'))
 			 		),
 			 		tabPanel(value='GameDetailsH2HTab',
 			 				 title='H2H',
@@ -103,9 +108,34 @@ server <- function(input, output, session) {
 
 	output$dateOutput <- renderText(format(input$GameDateInput, '%Y-%m-%d'))
 
+	leaguePriorities <- reactive({
+		print('leaguePriorities')
+		leaguePriorities <- readr::read_csv(file =  'data/raw/leaguePriorities.csv',
+											col_types = cols(
+												LeagueName = col_character(),
+												Country = col_character(),
+												IsMajor = col_logical(),
+												Priority = col_integer(),
+												Confederation = col_character()
+											))
+		return(leaguePriorities)
+	})
+
 	leagues <- reactive({
 		print('leagues')
-		leagues <- get_leagues(useDataCache)
+		leaguePriorities <- leaguePriorities()
+		if(is.null(leaguePriorities) || nrow(leaguePriorities) == 0){
+			return(NULL)
+		}
+		leagues <- get_leagues(useDataCache) %>%
+			left_join(leaguePriorities, by = c('Country', 'LeagueName')) %>%
+			filter(!input$MajorCompetitionsInput | IsMajor) %>%
+			filter(Confederation != 'UEFA' | input$ConfederationsInput_UEFA) %>%
+			filter(Confederation != 'CONMEBOL' | input$ConfederationsInput_CONMEBOL) %>%
+			filter(Confederation != 'CONCACAF' | input$ConfederationsInput_CONCACAF) %>%
+			filter(Confederation != 'AFC' | input$ConfederationsInput_AFC) %>%
+			filter(Confederation != 'CAF' | input$ConfederationsInput_CAF) %>%
+			filter(Confederation != 'OFC' | input$ConfederationsInput_OFC)
 	})
 
 	gameDate <- reactive({
@@ -369,8 +399,40 @@ server <- function(input, output, session) {
 	})
 
 	####
+	#### GAME DETAILS TAB - FORM
+	####
+	gdt_form_home_team <- reactive({
+		predictions <- gdt_predictions()
+		if(is.null(predictions)){
+			return(NULL)
+		}
+		if(is.null(predictions$teams) || is.null(predictions$teams$home))
+		{
+			return(NULL)
+		}
+		team <- predictions$teams$home
+		return(team)
+	})
+
+	gdt_form_away_team <- reactive({
+		predictions <- gdt_predictions()
+		if(is.null(predictions)){
+			return(NULL)
+		}
+		if(is.null(predictions$teams) || is.null(predictions$teams$away))
+		{
+			return(NULL)
+		}
+		team <- predictions$teams$away
+		return(team)
+	})
+
+	output$gdt_form_display <- DT::renderDataTable(DT::datatable(gdt_form_home_team(), escape = FALSE, options = list(pageLength = 50, lengthMenu = c(10, 25, 50, 100, 150, 200))))
+
+	####
 	#### GAME DETAILS TAB - H2H
 	####
+
 	gdt_h2h <- reactive({
 		predictions <- gdt_predictions()
 		if(is.null(predictions)){
