@@ -38,14 +38,16 @@ ui <- fluidPage(
 		tabPanel(value = 'GameDetailsTab',
 				 title = 'Game Details',
 				 fluidRow(
-				 	column(2,
+				 	column(3,
 				 		   htmlOutput('gdt_homeTeamName'),
 				 		   htmlOutput('gdt_homeTeamLogo')),
-				 	column(2,
-				 		   HTML('<h2>VERSUS</h2>')),
-				 	column(2,
+				 	column(3,
 				 		   htmlOutput('gdt_awayTeamName'),
 				 		   htmlOutput('gdt_awayTeamLogo'))
+				 ),
+				 fluidRow(
+				 	column(3,
+				 		   plotOutput('gdt_last_five_form_graph', height = '200px'))
 				 ),
 				 fluidRow(
 				 	htmlOutput('gdt_advice'),
@@ -53,12 +55,6 @@ ui <- fluidPage(
 				 	htmlOutput('gdt_pred_pcts')),
 
 			 	tabsetPanel(id = 'GameDetailsDetailTabs',
-	 				tabPanel(value='GameDetailsFormTab',
-	 						 title='Form',
-	 						 fluidRow(
-	 						 	column(4, plotOutput('gdt_last_five_form_graph', height = '200px'))
-	 						 )
-	 				),
 			 		tabPanel(value='GameDetailsH2HTab',
 			 				 title='H2H',
 			 				 fluidRow(HTML('<h4>H2H</H4>')),
@@ -445,8 +441,10 @@ server <- function(input, output, session) {
 		if(is.null(away) || is.null(away$last_5_matches)){
 			return(NULL)
 		}
+		homeName <- home$team_name
+		awayName <- away$team_name
 		lastFive <- data.frame(
-			Team = factor(c('Home','Away','Home','Away','Home','Away','Home','Away','Home','Away')),
+			Team = factor(c(homeName,awayName,homeName,awayName,homeName,awayName,homeName,awayName,homeName,awayName), c(homeName, awayName)),
 			FormType = factor(c('Form','Form','Att','Att','Def','Def','AvgScored','AvgScored','AvgAllowed','AvgAllowed'), c('Form', 'Att', 'Def', 'AvgScored', 'AvgAllowed')),
 			Value = c(str_replace(home$last_5_matches$forme, '%', '') %>% as.integer(.),
 					  str_replace(away$last_5_matches$forme, '%', '') %>% as.integer(.),
@@ -559,8 +557,8 @@ server <- function(input, output, session) {
 
 	output$gdt_homeTeamName <- renderText(paste0('<h2>', gdt_homeTeamName(), '</h2>'))
 	output$gdt_awayTeamName <- renderText(paste0('<h2>', gdt_awayTeamName(), '</h2>'))
-	output$gdt_homeTeamLogo <- renderText(paste0('<img style="width:120px;" src="', gdt_homeTeamLogo(), '"></img>'))
-	output$gdt_awayTeamLogo <- renderText(paste0('<img style="width:120px;" src="', gdt_awayTeamLogo(), '"></img>'))
+	output$gdt_homeTeamLogo <- renderText(paste0('<img style="height:80px;" src="', gdt_homeTeamLogo(), '"></img>'))
+	output$gdt_awayTeamLogo <- renderText(paste0('<img style="height:80px;" src="', gdt_awayTeamLogo(), '"></img>'))
 	output$gdt_advice <- renderText(paste0('Prediction: ', gdt_pred_advice(), '<br />', gdt_pred_score()))
 	output$gdt_pred_pcts <-  renderText(paste0('Home-Draw-Away<br/>', gdt_pred_pcts()))
 
@@ -590,6 +588,7 @@ server <- function(input, output, session) {
 				   HomeProb = round(100 * (1/Home) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
 				   DrawProb = round(100 * (1/Draw) / ((1/Away)+(1/Draw)+1/Home), digits = 1),
 				   AwayProb = round(100 * (1/Away) / ((1/Away)+(1/Draw)+1/Home), digits = 1)) %>%
+			ungroup() %>%
 			select(BookmakerName, Home, Draw, Away, HomeProb, DrawProb, AwayProb) %>%
 			arrange(BookmakerName)
 		print('gdt_odds_winner: got odds')
