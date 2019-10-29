@@ -415,9 +415,20 @@ server <- function(input, output, session) {
 		if(is.null(predictions$winning_percent)){
 			return(NULL)
 		}
-		homePct <- predictions$winning_percent$home
-		drawPct <- predictions$winning_percent$draws
-		awayPct <- predictions$winning_percent$away
+		odds <- gdt_odds_winner()
+		if(!is.null(odds) && nrow(odds) > 0){
+			x <- odds %>% summarise(HomeProb = mean(HomeProb),
+									DrawProb = mean(DrawProb),
+									AwayProb = mean(AwayProb))
+
+			homePct <- round(x$HomeProb, digits = 1) %>% paste0(., '%')
+			drawPct <- round(x$DrawProb, digits = 1) %>% paste0(., '%')
+			awayPct <- round(x$AwayProb, digits = 1) %>% paste0(., '%')
+		} else {
+			homePct <- predictions$winning_percent$home
+			drawPct <- predictions$winning_percent$draws
+			awayPct <- predictions$winning_percent$away
+		}
 		return(paste0(homePct, '-', drawPct, '-', awayPct))
 	})
 
