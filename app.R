@@ -129,8 +129,10 @@ server <- function(input, output, session) {
 	})
 
 	leagues <- reactive({
+		print('START GET leagues')
 		leaguePriorities <- leaguePriorities()
 		if(is.null(leaguePriorities) || nrow(leaguePriorities) == 0){
+			print('END GET leagues (return NULL)')
 			return(NULL)
 		}
 		leagues <- get_leagues(useDataCache) %>%
@@ -142,16 +144,23 @@ server <- function(input, output, session) {
 			filter(Confederation != 'AFC' | input$ConfederationsInput_AFC) %>%
 			filter(Confederation != 'CAF' | input$ConfederationsInput_CAF) %>%
 			filter(Confederation != 'OFC' | input$ConfederationsInput_OFC)
+		print(paste0('END GET leagues (return ', nrow(leagues), ' rows)'))
+		return(leagues)
 	})
 
 	gameDate <- reactive({
+		print('START GET gameDate')
 		if(is.null(input$GameDateInput)){
+			print('START GET gameDate (return NULL)')
 			return(NULL)
 		}
 		gameDate <- format(input$GameDateInput, '%Y-%m-%d')
+		print(paste0('END GET gameDate (', gameDate, ')'))
+		return(gameDate)
 	})
 
 	dateGames <- reactive({
+		print('START GET dateGames')
 		leagues <- leagues()
 		if(is.null(leagues) || nrow(leagues) == 0){
 			return(NULL)
@@ -162,6 +171,7 @@ server <- function(input, output, session) {
 		}
 		dateGames <- get_fixtures_by_date(gameDate, useDataCache) %>%
 			inner_join(leagues %>% select(LeagueId), by = 'LeagueId')
+		print('END GET dateGames')
 		return(dateGames)
 	})
 
@@ -204,8 +214,10 @@ server <- function(input, output, session) {
 	})
 
 	predictions <- reactive({
+		print('START GET predictions')
 		dateGames <- dateGames()
 		if(is.null(dateGames) || nrow(dateGames) == 0){
+			print('END GET predictions (return NULL)')
 			return(NULL)
 		}
 		fixtureIds <- dateGames %>% select(FixtureId)
@@ -219,20 +231,22 @@ server <- function(input, output, session) {
 				for(i in 1:fixtureCount){
 					fixtureId <- fixtureIds[i,]
 					fixturePred <- get_predictions_by_fixture(fixtureId) %>%
-						mutate(FixtureId = fixture_id,
+						mutate(FixtureId = fixtureId,
 							   HomePct = as.integer(str_replace(winning_percent$home, '%', '')),
 							   DrawPct = as.integer(str_replace(winning_percent$draws, '%', '')),
 							   AwayPct = as.integer(str_replace(winning_percent$away, '%', ''))) %>%
 						select(FixtureId, HomePct, DrawPct, AwayPct)
+					rownames(fixturePred) <- c(fixturePred$FixtureId)
 					if(is.null(preds)){
 						preds <- fixturePred
 					}else{
-						preds <- rbind(preds, fixturePred)
+						preds <- bind_rows(preds, fixturePred)
 					}
 					incProgress(1/fixtureCount)
 				}
 			}
 		)
+		print(paste0('END GET predictions (return ', nrow(preds), ' rows)'))
 		return(preds)
 	})
 
