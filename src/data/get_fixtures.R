@@ -158,6 +158,7 @@ get_fixtures_by_date <- function(gameDate_yyyy_mm_dd, allowCache = TRUE){
 	fixtures$SecondHalfStart <- fixtures$secondHalfStart
 	fixtures$HomeTeamLogo <- fixtures$homeTeam$logo
 	fixtures$AwayTeamLogo <- fixtures$awayTeam$logo
+	fixtures$league <- NULL
 	fixtures$fixture_id <- NULL
 	fixtures$league_id <- NULL
 	fixtures$homeTeam <- NULL
