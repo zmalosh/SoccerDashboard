@@ -4,7 +4,7 @@ source('src/data/get_api_football_json_from_url.R')
 get_predictions_by_fixture <- function(fixtureId, allowCache = TRUE){
 	url <- paste0('https://api-football-v1.p.rapidapi.com/v2/predictions/', fixtureId)
 	localPath <- paste0(getwd(), '/data/raw/predictions/pred_', str_pad(fixtureId, 7, pad = '0'), '.rds')
-	cacheExpirationMin <- 240
+	cacheExpirationMin <- 10
 
 	if(allowCache){
 		dirExists <- dir.exists(dirname(localPath))
